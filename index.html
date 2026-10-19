@@ -1,0 +1,797 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Khlui</title>
+<meta name="description" content="Learn the Thai khlui flute: fingerings for every note, songs, and chords.">
+<meta name="theme-color" content="#120d08">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Khlui">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mitr:wght@400;500;600&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* bark — the dark tree */
+  --bark-950:#0d0905; --bark-900:#120d08; --bark-850:#18110b; --bark-800:#1f160e;
+  --bark-700:#2b1f14; --bark-600:#3b2a1b; --bark-500:#553d27; --wood:#8a6440;
+  /* leaves */
+  --leaf-950:#0f1f0a; --leaf-800:#1f3a17; --leaf-700:#2f5a24; --leaf-600:#3f7a2f;
+  --leaf-500:#5a9a3f; --leaf-400:#7dbb55; --leaf-300:#a6d67a; --leaf-200:#cbe8ac;
+  /* text */
+  --tx-1:#f2eadb; --tx-2:#d3c6ae; --tx-3:#ab9c83; --tx-4:#7f715c; --tx-5:#5e5242;
+  --err:#e5735f;
+  --safe-b:env(safe-area-inset-bottom,0px); --safe-t:env(safe-area-inset-top,0px);
+  --hd:"Mitr",system-ui,sans-serif; --bd:"Sarabun",-apple-system,system-ui,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bark-900);color:var(--tx-1);font-family:var(--bd);font-size:16px}
+body{min-height:100dvh;
+  background:
+    radial-gradient(120% 60% at 50% -10%, rgba(63,122,47,.28), transparent 60%),
+    radial-gradient(80% 40% at 100% 100%, rgba(47,90,36,.18), transparent 70%),
+    var(--bark-900);
+  background-attachment:fixed}
+button{font:inherit;color:inherit;cursor:pointer}
+input,textarea{font:inherit}
+.app{max-width:520px;margin:0 auto;padding:calc(var(--safe-t) + 10px) 16px calc(var(--safe-b) + 96px)}
+
+/* ---------- header ---------- */
+header.top{display:flex;align-items:center;gap:12px;padding:6px 0 4px}
+.logo{width:44px;height:44px;flex:none}
+.brand h1{font-family:var(--hd);font-weight:600;font-size:28px;margin:0;letter-spacing:.5px;line-height:1;color:var(--leaf-300)}
+.brand .th{font-family:var(--hd);font-size:14px;color:var(--tx-3);margin-top:3px}
+.vine{display:block;width:100%;height:22px;margin:6px 0 12px;color:var(--leaf-600)}
+
+/* ---------- cards & common ---------- */
+.card{background:linear-gradient(180deg,var(--bark-800),var(--bark-850));border:1px solid var(--bark-600);
+  border-radius:20px;padding:16px;margin-bottom:14px;position:relative;overflow:hidden}
+.card.leafy::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;
+  background:linear-gradient(90deg,transparent,var(--leaf-500),var(--leaf-300),var(--leaf-500),transparent)}
+h2{font-family:var(--hd);font-weight:500;font-size:20px;margin:0 0 4px;color:var(--tx-1)}
+h2 .th{color:var(--leaf-400);font-size:15px;margin-left:6px;font-weight:400}
+h3{font-family:var(--hd);font-weight:500;font-size:16px;margin:0 0 8px;color:var(--tx-2)}
+p.sub{margin:0 0 12px;color:var(--tx-3);font-size:14px;line-height:1.5}
+.muted{color:var(--tx-3)} .dim{color:var(--tx-4)}
+.btn{border:1px solid var(--bark-500);background:var(--bark-700);border-radius:14px;padding:11px 16px;min-height:44px;font-weight:500}
+.btn:active{transform:scale(.97)}
+.btn.leaf{background:linear-gradient(180deg,var(--leaf-400),var(--leaf-500));border-color:var(--leaf-400);color:var(--leaf-950);font-weight:600}
+.btn.ghost{background:transparent}
+.btn.sm{min-height:36px;padding:7px 12px;font-size:14px;border-radius:12px}
+.row{display:flex;gap:10px;align-items:center}
+.row.wrap{flex-wrap:wrap}
+.grow{flex:1;min-width:0}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 11px;font-size:13px;font-weight:500;
+  background:var(--bark-700);border:1px solid var(--bark-500);color:var(--tx-2)}
+.pill.leaf{background:var(--leaf-800);border-color:var(--leaf-600);color:var(--leaf-200)}
+.notice{border-radius:14px;padding:12px 14px;font-size:14px;line-height:1.5;background:var(--bark-700);border:1px solid var(--bark-500);color:var(--tx-2)}
+.notice.err{border-color:rgba(229,115,95,.5);color:#f3b3a6;background:rgba(229,115,95,.08)}
+.hidden{display:none!important}
+
+/* ---------- tabs ---------- */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:8px 12px calc(var(--safe-b) + 8px);
+  background:linear-gradient(180deg,rgba(18,13,8,.6),rgba(13,9,5,.97) 35%);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-top:1px solid var(--bark-700)}
+nav.tabs .inner{max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+nav.tabs button{background:none;border:0;border-radius:14px;padding:6px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--tx-4);min-height:54px}
+nav.tabs button svg{width:24px;height:24px}
+nav.tabs button .t{font-size:12px;font-weight:600}
+nav.tabs button .th{font-family:var(--hd);font-size:10px;opacity:.8}
+nav.tabs button.on{color:var(--leaf-300);background:rgba(90,154,63,.12)}
+
+/* ---------- note grid ---------- */
+.notes{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.nbtn{border:1px solid var(--bark-600);background:var(--bark-700);border-radius:14px;padding:8px 2px 7px;min-height:58px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.nbtn .th{font-family:var(--hd);font-size:19px;line-height:1.1;color:var(--tx-1)}
+.nbtn .lt{font-size:11px;color:var(--tx-3);font-weight:600}
+.nbtn.high{border-style:dashed}
+.nbtn.on{background:var(--leaf-700);border-color:var(--leaf-400)}
+.nbtn.on .th{color:var(--leaf-200)} .nbtn.on .lt{color:var(--leaf-300)}
+.nbtn.sharp{min-height:44px} .nbtn.sharp .th{font-size:15px}
+.reglabel{font-size:12px;color:var(--tx-4);margin:12px 0 6px;font-weight:600;letter-spacing:.4px;text-transform:uppercase}
+
+/* ---------- big fingering ---------- */
+.finger{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.finger svg.flute{width:118px;height:auto;display:block}
+.finfo .big{font-family:var(--hd);font-size:46px;line-height:1;color:var(--leaf-300)}
+.finfo .names{font-size:15px;color:var(--tx-2);margin:6px 0 10px}
+.finfo .steps{margin:0;padding:0;list-style:none;font-size:14px;color:var(--tx-2);line-height:1.55}
+.finfo .steps li{display:flex;gap:8px;align-items:flex-start}
+.finfo .steps li::before{content:"";flex:none;width:7px;height:7px;border-radius:50% 0;background:var(--leaf-500);transform:rotate(45deg);margin-top:8px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--tx-3)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:13px;height:13px;border-radius:50%;display:inline-block}
+.legend .c{background:var(--leaf-400)} .legend .o{border:2px solid var(--wood);background:var(--bark-950)}
+.legend .h{background:linear-gradient(90deg,var(--leaf-400) 50%,var(--bark-950) 50%);border:1px solid var(--wood)}
+
+/* ---------- search & lists ---------- */
+.search{display:flex;gap:8px}
+.search input{flex:1;min-width:0;border:1px solid var(--bark-500);background:var(--bark-950);color:var(--tx-1);border-radius:14px;padding:12px 14px;font-size:16px;outline:none}
+.search input:focus{border-color:var(--leaf-500)}
+.list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.item{display:flex;align-items:center;gap:12px;border:1px solid var(--bark-600);background:var(--bark-700);border-radius:14px;padding:12px 14px;text-align:left;width:100%;min-height:56px}
+.item .ic{width:34px;height:34px;flex:none;border-radius:10px;background:var(--leaf-800);color:var(--leaf-300);display:grid;place-items:center}
+.item .ic svg{width:18px;height:18px}
+.item .tt{font-weight:600;font-size:15px;line-height:1.3}
+.item .st{font-size:12px;color:var(--tx-3);margin-top:2px}
+.item .chev{color:var(--tx-5);margin-left:auto}
+.spinner{width:20px;height:20px;border-radius:50%;border:3px solid var(--bark-500);border-top-color:var(--leaf-400);animation:sp 0.8s linear infinite;display:inline-block;vertical-align:middle}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* ---------- song player ---------- */
+.player{position:fixed;inset:0;z-index:30;background:var(--bark-900);overflow-y:auto;-webkit-overflow-scrolling:touch}
+.player .app{padding-bottom:calc(var(--safe-b) + 24px)}
+.ptop{display:flex;align-items:center;gap:8px;padding:4px 0 8px}
+.ptop .title{font-family:var(--hd);font-size:18px;line-height:1.25;flex:1;min-width:0}
+.ptop .title small{display:block;font-family:var(--bd);font-size:12px;color:var(--tx-3)}
+.iconbtn{width:44px;height:44px;flex:none;border-radius:14px;border:1px solid var(--bark-500);background:var(--bark-700);display:grid;place-items:center}
+.iconbtn svg{width:22px;height:22px}
+.iconbtn.on{background:var(--leaf-700);border-color:var(--leaf-400);color:var(--leaf-200)}
+.lyric{font-size:18px;line-height:1.4;color:var(--tx-2);min-height:26px;margin:2px 0 10px;text-align:center;font-family:var(--hd)}
+.strip{display:flex;gap:6px;overflow-x:auto;padding:4px 2px 10px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.chip{flex:none;scroll-snap-align:center;border:1px solid var(--bark-600);background:var(--bark-700);border-radius:12px;min-width:46px;padding:6px 6px 5px;
+  display:flex;flex-direction:column;align-items:center;gap:4px}
+.chip .th{font-family:var(--hd);font-size:16px;line-height:1}
+.chip .lt{font-size:10px;color:var(--tx-3);font-weight:600}
+.chip.on{background:var(--leaf-700);border-color:var(--leaf-300)}
+.chip.on .lt{color:var(--leaf-200)}
+.chip.warn{border-style:dashed}
+.mini{display:block}
+.navbtns{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:10px;margin-top:12px}
+.navbtns .btn{min-height:58px;font-size:16px}
+.kbar{display:flex;align-items:center;gap:8px;justify-content:space-between;margin-top:6px;flex-wrap:wrap}
+.kbar .kv{font-size:14px;color:var(--tx-2)}
+.lines{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.lineb{border:1px solid var(--bark-600);background:var(--bark-800);border-radius:12px;padding:9px 12px;text-align:left;width:100%}
+.lineb.on{border-color:var(--leaf-500);background:rgba(63,122,47,.15)}
+.lineb .ln{font-family:var(--hd);font-size:15px;color:var(--leaf-300);word-spacing:3px}
+.lineb .ly{font-size:13px;color:var(--tx-3);margin-top:2px}
+.progress{height:4px;border-radius:4px;background:var(--bark-700);overflow:hidden;margin:2px 0 10px}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--leaf-600),var(--leaf-300));width:0;transition:width .2s}
+
+/* ---------- chords ---------- */
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{border:1px solid var(--bark-600);background:var(--bark-700);border-radius:11px;min-width:44px;min-height:40px;padding:6px 10px;font-weight:600;font-size:14px}
+.seg button.on{background:var(--leaf-700);border-color:var(--leaf-400);color:var(--leaf-200)}
+.chordnotes{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px;margin-top:12px}
+.cn{border:1px solid var(--bark-600);background:var(--bark-800);border-radius:16px;padding:10px 6px 8px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.cn .th{font-family:var(--hd);font-size:20px;color:var(--leaf-300);line-height:1}
+.cn .lt{font-size:12px;color:var(--tx-3)}
+.cn .role{font-size:11px;color:var(--tx-4);text-transform:uppercase;letter-spacing:.5px}
+textarea.prog{width:100%;min-height:76px;border:1px solid var(--bark-500);background:var(--bark-950);color:var(--tx-1);border-radius:14px;padding:12px;font-size:16px;outline:none;resize:vertical}
+textarea.prog:focus{border-color:var(--leaf-500)}
+.progrow{display:flex;gap:10px;align-items:center;border-top:1px solid var(--bark-700);padding:10px 0}
+.progrow:first-child{border-top:0}
+.progrow .nm{font-family:var(--hd);font-size:20px;color:var(--leaf-300);width:62px;flex:none}
+.progrow .ns{display:flex;gap:6px;flex-wrap:wrap}
+.footer{font-size:12px;color:var(--tx-5);text-align:center;margin-top:18px;line-height:1.6}
+.footer a{color:var(--tx-4)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+    <linearGradient id="bambooG" x1="0" x2="1"><stop offset="0" stop-color="#5e432a"/><stop offset=".35" stop-color="#a47a4f"/><stop offset=".6" stop-color="#8a6440"/><stop offset="1" stop-color="#4a331f"/></linearGradient>
+    <radialGradient id="leafG" cx=".35" cy=".35"><stop offset="0" stop-color="#cbe8ac"/><stop offset=".55" stop-color="#7dbb55"/><stop offset="1" stop-color="#3f7a2f"/></radialGradient>
+</defs></svg>
+<div class="app" id="app">
+  <header class="top">
+    <svg class="logo" viewBox="0 0 64 64" aria-hidden="true">
+      <circle cx="32" cy="32" r="30" fill="#1f160e" stroke="#3b2a1b" stroke-width="2"/>
+      <path d="M14 44 C 24 30, 38 22, 52 16" stroke="#8a6440" stroke-width="7" stroke-linecap="round" fill="none"/>
+      <path d="M14 44 C 24 30, 38 22, 52 16" stroke="#553d27" stroke-width="7" stroke-dasharray="1 9" stroke-linecap="butt" fill="none"/>
+      <circle cx="27" cy="33.5" r="1.8" fill="#0d0905"/><circle cx="33" cy="29" r="1.8" fill="#0d0905"/><circle cx="39" cy="25" r="1.8" fill="#0d0905"/>
+      <path d="M44 40 c 6 -10, 14 -10, 14 -10 c -2 8, -7 12, -14 10z" fill="#7dbb55"/>
+      <path d="M40 46 c 2 -9, 9 -12, 9 -12 c 1 7, -3 11, -9 12z" fill="#5a9a3f"/>
+      <path d="M12 22 c 4 -8, 12 -9, 12 -9 c -1 7, -6 10, -12 9z" fill="#a6d67a"/>
+    </svg>
+    <div class="brand">
+      <h1>Khlui</h1>
+      <div class="th">ขลุ่ย · Thai bamboo flute</div>
+    </div>
+  </header>
+  <svg class="vine" viewBox="0 0 400 22" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 11 C 40 2, 60 20, 100 11 S 160 2, 200 11 S 260 20, 300 11 S 360 2, 400 11" stroke="currentColor" stroke-width="1.5" fill="none"/>
+    <g fill="#5a9a3f">
+      <path d="M50 9 c 4 -7 12 -7 12 -7 c -2 6 -6 8 -12 7z"/><path d="M150 13 c 4 7 12 7 12 7 c -2 -6 -6 -8 -12 -7z"/>
+      <path d="M250 9 c 4 -7 12 -7 12 -7 c -2 6 -6 8 -12 7z"/><path d="M350 13 c 4 7 12 7 12 7 c -2 -6 -6 -8 -12 -7z"/>
+    </g>
+    <g fill="#7dbb55"><circle cx="200" cy="11" r="3.2"/><path d="M200 2 l3 6 -3 2 -3 -2z M200 20 l3 -6 -3 -2 -3 2z"/></g>
+  </svg>
+
+  <!-- ===== NOTES ===== -->
+  <section id="tab-notes">
+    <div class="card leafy">
+      <div class="finger" id="bigFinger"></div>
+      <div class="legend">
+        <span><i class="c"></i>Cover hole</span><span><i class="o"></i>Open</span><span><i class="h"></i>Half cover</span>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Pick a note <span class="th">เลือกเสียง</span></h2>
+      <p class="sub">Tap a note to see where your fingers go and hear how it should sound.</p>
+      <div class="reglabel">Low · gentle breath</div>
+      <div class="notes" id="gridLow"></div>
+      <div class="reglabel">High · stronger breath</div>
+      <div class="notes" id="gridHigh"></div>
+      <div class="reglabel">In-between notes · half-holes</div>
+      <div class="notes" id="gridSharp"></div>
+    </div>
+    <div class="card">
+      <h2>How to hold it <span class="th">วิธีจับ</span></h2>
+      <p class="sub" style="margin-bottom:0">
+        Hold the khlui pointing down, mouthpiece at your lips. <b>Left hand on top</b>: thumb covers the hole on the back, index / middle / ring
+        fingers cover holes 1–3. <b>Right hand below</b>: index / middle / ring / little fingers cover holes 4–7.
+        Use the flat pads of your fingers, not the tips, and press just enough to seal. Blow warm and slow, like fogging a window —
+        if it squeaks, blow softer.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== SONGS ===== -->
+  <section id="tab-songs" class="hidden">
+    <div class="card leafy">
+      <h2>Find a song <span class="th">ค้นหาเพลง</span></h2>
+      <p class="sub">Type a song name. Khlui looks up the melody online and turns every note into a fingering.</p>
+      <form class="search" id="searchForm" autocomplete="off">
+        <input id="q" type="search" placeholder="e.g. Hallelujah, Perfect, Let it go" enterkeyhint="search">
+        <button class="btn leaf" type="submit">Search</button>
+      </form>
+      <div id="results"></div>
+    </div>
+    <div class="card">
+      <h2>My songs <span class="th">เพลงของฉัน</span></h2>
+      <div class="list" id="savedList"></div>
+    </div>
+    <div class="card">
+      <h2>Start here <span class="th">เริ่มต้น</span></h2>
+      <p class="sub">Simple tunes that sit comfortably on the khlui. They work offline.</p>
+      <div class="list" id="starterList"></div>
+    </div>
+  </section>
+
+  <!-- ===== CHORDS ===== -->
+  <section id="tab-chords" class="hidden">
+    <div class="card leafy">
+      <h2>Chords <span class="th">คอร์ด</span></h2>
+      <p class="sub">The khlui plays one note at a time, so a chord is played as its notes <b>one after another</b> (an arpeggio) —
+        or just play the first note (the root) when the chord changes. Pick a chord:</p>
+      <div class="seg" id="rootSeg"></div>
+      <div class="seg" id="typeSeg" style="margin-top:8px"></div>
+      <div class="row" style="margin-top:14px">
+        <div class="grow"><span id="chordName" style="font-family:var(--hd);font-size:30px;color:var(--leaf-300)"></span>
+          <span class="muted" id="chordDesc" style="margin-left:6px"></span></div>
+        <button class="btn leaf sm" id="playChord">▶ Play</button>
+      </div>
+      <div class="chordnotes" id="chordNotes"></div>
+    </div>
+    <div class="card">
+      <h2>Paste chords from any site <span class="th">วางคอร์ด</span></h2>
+      <p class="sub">Found a song's chords on a guitar site? Paste them here (e.g. <i>C G Am F</i>) and see the khlui notes for each one.</p>
+      <textarea class="prog" id="progIn" placeholder="C  G  Am  F"></textarea>
+      <div id="progOut" style="margin-top:6px"></div>
+    </div>
+  </section>
+
+  <div class="footer">Fingerings are for a standard <i>khlui phiang aw</i> (7 holes + thumb). Note names are relative —
+    “do” is whatever your khlui plays with every hole covered.<br>Song melodies via <a href="https://noobnotes.net" target="_blank" rel="noopener">noobnotes.net</a>.</div>
+</div>
+
+<!-- ===== PLAYER (overlay) ===== -->
+<div class="player hidden" id="player">
+  <div class="app">
+    <div class="ptop">
+      <button class="iconbtn" id="pBack" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="title" id="pTitle"></div>
+      <button class="iconbtn" id="pSave" aria-label="Save song"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 21C6 16 3 12.5 3 9a4.5 4.5 0 0 1 9-1 4.5 4.5 0 0 1 9 1c0 3.5-3 7-9 12z"/></svg></button>
+    </div>
+    <div class="progress"><i id="pProg"></i></div>
+    <div class="card leafy" style="padding-bottom:12px">
+      <div class="lyric" id="pLyric"></div>
+      <div class="finger" id="pFinger"></div>
+      <div class="navbtns">
+        <button class="btn" id="pPrev">‹ Back</button>
+        <button class="btn leaf" id="pPlay">▶ Hear it</button>
+        <button class="btn" id="pNext">Next ›</button>
+      </div>
+    </div>
+    <div class="strip" id="pStrip"></div>
+    <div class="card">
+      <div class="kbar">
+        <div class="kv" id="pKey"></div>
+        <div class="row">
+          <button class="btn sm" id="kDown" aria-label="Lower">− ½</button>
+          <button class="btn sm" id="kAuto">Auto-fit</button>
+          <button class="btn sm" id="kUp" aria-label="Higher">+ ½</button>
+        </div>
+      </div>
+      <div class="notice hidden" id="pWarn" style="margin-top:10px"></div>
+    </div>
+    <div class="card">
+      <h3>Whole song</h3>
+      <div class="row" style="margin-bottom:8px"><button class="btn sm" id="pPlayLine">▶ Play this line</button></div>
+      <div class="lines" id="pLines"></div>
+      <div class="footer" id="pSource"></div>
+    </div>
+  </div>
+</div>
+
+<nav class="tabs">
+  <div class="inner">
+    <button data-tab="notes" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="20" rx="3"/><circle cx="12" cy="9" r="1" fill="currentColor"/><circle cx="12" cy="13" r="1" fill="currentColor"/><circle cx="12" cy="17" r="1" fill="currentColor"/></svg><span class="t">Notes</span><span class="th">เสียง</span></button>
+    <button data-tab="songs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg><span class="t">Songs</span><span class="th">เพลง</span></button>
+    <button data-tab="chords"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c4 4 7 8 7 11a7 7 0 0 1-14 0c0-3 3-7 7-11z"/><path d="M12 21V9"/><path d="M12 14l3-3M12 17l-3-3"/></svg><span class="t">Chords</span><span class="th">คอร์ด</span></button>
+  </div>
+</nav>
+
+<script>
+"use strict";
+/* ================= music model =================
+   Pitches are relative MIDI numbers where 60 = "do" (all holes covered).
+   Khlui phiang aw range: 12 natural notes, do (60) up to high sol (79). */
+const LETTERS = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+const SOLFA = {0:["ด","Do"],2:["ร","Re"],4:["ม","Mi"],5:["ฟ","Fa"],7:["ซ","Sol"],9:["ล","La"],11:["ท","Ti"]};
+const NATURALS = [60,62,64,65,67,69,71,72,74,76,77,79];
+const LOW = 60, HIGH = 79;
+const FINGER_NAMES = ["Left thumb (back)","Left index","Left middle","Left ring","Right index","Right middle","Right ring","Right little"];
+
+function isNatural(m){ return NATURALS.includes(m); }
+function noteName(m){ return LETTERS[((m % 12) + 12) % 12]; }
+function thaiName(m){
+  const pc = ((m%12)+12)%12;
+  if (SOLFA[pc]) return { th: SOLFA[pc][0], en: SOLFA[pc][1] };
+  const lo = SOLFA[pc-1];
+  return { th: lo[0] + "♯", en: lo[1] + " sharp" };
+}
+
+/* holes[0] = thumb, holes[1..7] = front holes top→bottom. 1 covered, 0 open, .5 half. */
+function fingering(m){
+  if (m < LOW || m > HIGH) return null;
+  let base = m, half = false;
+  if (!isNatural(m)) { base = m - 1; half = true; }
+  const i = NATURALS.indexOf(base), high = i >= 7, step = i % 7;
+  const covered = 7 - step;
+  const holes = [high ? .5 : 1];
+  for (let h = 1; h <= 7; h++) holes.push(h <= covered ? 1 : 0);
+  if (half) holes[covered] = .5;
+  return { holes, high, half };
+}
+
+function describe(m){
+  const f = fingering(m); if (!f) return [];
+  const out = [];
+  const cov = [], open = [], half = [];
+  f.holes.slice(1).forEach((v,k)=> (v===1?cov:v===0?open:half).push(k+1));
+  if (!open.length && !half.length) out.push("Cover all 7 front holes");
+  else if (cov.length) out.push(`Cover holes ${rangeTxt(cov)}`);
+  else out.push("Lift every front finger");
+  if (open.length) out.push(`Lift ${open.length===1?"hole":"holes"} ${rangeTxt(open)}`);
+  if (half.length) out.push(`Half-cover hole ${half[0]} — roll your finger halfway off`);
+  out.push(f.high ? "Thumb: half-open the back hole (pinch)" : "Thumb: cover the back hole");
+  out.push(f.high ? "Breath: stronger and faster" : "Breath: gentle and warm");
+  return out;
+}
+function rangeTxt(a){ return a.length>2 && a[a.length-1]-a[0]===a.length-1 ? `${a[0]}–${a[a.length-1]}` : a.join(", "); }
+
+/* ================= drawing ================= */
+function holePaint(v, r, cx, cy, num){
+  const id = "h"+Math.random().toString(36).slice(2,8);
+  let s = "";
+  if (v === 1) s += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#leafG)" stroke="#cbe8ac" stroke-width="1.2"/>`;
+  else if (v === 0) s += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#0d0905" stroke="#c49a6c" stroke-width="2"/>`;
+  else s += `<clipPath id="${id}"><rect x="${cx-r-2}" y="${cy-r-2}" width="${r+2}" height="${2*r+4}"/></clipPath>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="#0d0905" stroke="#c49a6c" stroke-width="2"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#leafG)" clip-path="url(#${id})"/>`;
+  if (num != null) s += `<text x="${cx}" y="${cy+4}" text-anchor="middle" font-size="11" font-weight="700" fill="${v===1?'#0f1f0a':v===0?'#ab9c83':'#f2eadb'}" font-family="Sarabun,system-ui">${num}</text>`;
+  return s;
+}
+function fluteSVG(m){
+  const f = fingering(m);
+  const W = 118, H = 380, cx = 46, top = 10;
+  let s = `<svg class="flute" viewBox="0 0 ${W} ${H}" role="img" aria-label="Khlui fingering for ${noteName(m)}">
+  <rect x="${cx-17}" y="${top}" width="34" height="${H-top-8}" rx="15" fill="url(#bambooG)" stroke="#2b1f14" stroke-width="1.5"/>
+  <path d="M${cx-17} ${top+28} h34 M${cx-17} ${top+150} h34 M${cx-17} ${top+262} h34" stroke="#3b2a1b" stroke-width="2.4"/>
+  <rect x="${cx-9}" y="${top+38}" width="18" height="9" rx="2" fill="#0d0905" stroke="#c49a6c" stroke-width="1"/>
+  <text x="${cx}" y="${top+20}" text-anchor="middle" font-size="9" fill="#f2eadb" font-family="Sarabun,system-ui" font-weight="600">blow</text>`;
+  const y0 = top + 80, gap = 37;
+  for (let h = 1; h <= 7; h++) {
+    const y = y0 + (h-1)*gap + (h>3 ? 14 : 0);
+    s += holePaint(f.holes[h], 10.5, cx, y, h);
+  }
+  // thumb hole drawn beside, with a link line to show it's on the back
+  const ty = y0 + 18;
+  s += `<path d="M${cx+17} ${ty} H ${cx+38}" stroke="#7f715c" stroke-width="1.2" stroke-dasharray="2 3"/>`;
+  s += holePaint(f.holes[0], 10.5, cx+52, ty, "T");
+  s += `<text x="${cx+52}" y="${ty+26}" text-anchor="middle" font-size="9" fill="#ab9c83" font-family="Sarabun,system-ui">back</text>`;
+  s += `<text x="${cx+52}" y="${y0+gap*2+4}" text-anchor="middle" font-size="9" fill="#7f715c" font-family="Sarabun,system-ui">L hand</text>`;
+  s += `<text x="${cx+52}" y="${y0+gap*4+30}" text-anchor="middle" font-size="9" fill="#7f715c" font-family="Sarabun,system-ui">R hand</text>`;
+  // breath marker
+  s += `<g transform="translate(${cx+44},${top+10})">${f.high
+      ? `<path d="M0 12 q8 -10 16 0 q8 10 16 0" stroke="#a6d67a" stroke-width="2.4" fill="none"/><path d="M0 22 q8 -10 16 0 q8 10 16 0" stroke="#a6d67a" stroke-width="2.4" fill="none"/>`
+      : `<path d="M0 16 q8 -6 16 0 q8 6 16 0" stroke="#7dbb55" stroke-width="2" fill="none"/>`}</g>`;
+  return s + `</svg>`;
+}
+function miniSVG(m){
+  const f = fingering(m); if (!f) return `<svg class="mini" width="12" height="74"></svg>`;
+  let s = `<svg class="mini" width="22" height="78" viewBox="0 0 22 78">`;
+  s += `<rect x="4" y="0" width="12" height="78" rx="6" fill="#553d27"/>`;
+  for (let h = 1; h <= 7; h++) {
+    const y = 9 + (h-1)*9.4 + (h>3?3:0), v = f.holes[h];
+    s += v===1 ? `<circle cx="10" cy="${y}" r="3.4" fill="#7dbb55"/>`
+       : v===0 ? `<circle cx="10" cy="${y}" r="3" fill="#0d0905" stroke="#c49a6c" stroke-width="1"/>`
+       : `<circle cx="10" cy="${y}" r="3" fill="#0d0905" stroke="#c49a6c" stroke-width="1"/><path d="M10 ${y-3.4} a3.4 3.4 0 0 0 0 6.8z" fill="#7dbb55"/>`;
+  }
+  const tv = f.holes[0];
+  s += `<circle cx="19" cy="12" r="2.4" fill="${tv===1?'#7dbb55':'#0d0905'}" stroke="#a6d67a" stroke-width=".8"/>`;
+  return s + `</svg>`;
+}
+function fingerPanel(m, extra){
+  const f = fingering(m), t = thaiName(m);
+  return `${fluteSVG(m)}<div class="finfo">
+    <div class="big">${t.th}</div>
+    <div class="names"><b>${t.en}</b> · ${noteName(m)}${f.high?" (high)":""} ${f.half?'<span class="pill">half-hole</span>':""}</div>
+    <ul class="steps">${describe(m).map(x=>`<li>${x}</li>`).join("")}</ul>${extra||""}</div>`;
+}
+
+/* ================= sound (Web Audio, synthesised so it works offline) ================= */
+let AC = null;
+function ac(){ try { if (!AC) AC = new (window.AudioContext||window.webkitAudioContext)(); if (AC.state==="suspended") AC.resume(); } catch(e){ AC = null; } return AC; }
+function tone(m, when=0, dur=.7){
+  const a = ac(); if (!a) return;
+  try {
+    const t0 = a.currentTime + when, freq = 440 * Math.pow(2, (m + 12 - 69)/12);
+    const o = a.createOscillator(), o2 = a.createOscillator(), g = a.createGain(), g2 = a.createGain();
+    const lfo = a.createOscillator(), lg = a.createGain();
+    o.type = "sine"; o.frequency.value = freq; o2.type = "triangle"; o2.frequency.value = freq*2; g2.gain.value = .08;
+    lfo.frequency.value = 5.2; lg.gain.value = freq*.006; lfo.connect(lg); lg.connect(o.frequency); lg.connect(o2.frequency);
+    o.connect(g); o2.connect(g2); g2.connect(g); g.connect(a.destination);
+    g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(.32, t0+.06);
+    g.gain.setValueAtTime(.28, t0+dur-.12); g.gain.linearRampToValueAtTime(0, t0+dur);
+    // breathy chiff
+    const n = a.createBufferSource(), buf = a.createBuffer(1, a.sampleRate*.12, a.sampleRate), d = buf.getChannelData(0);
+    for (let i=0;i<d.length;i++) d[i] = (Math.random()*2-1) * (1 - i/d.length);
+    const bp = a.createBiquadFilter(), ng = a.createGain(); bp.type="bandpass"; bp.frequency.value=freq*2; bp.Q.value=1.5; ng.gain.value=.12;
+    n.buffer = buf; n.connect(bp); bp.connect(ng); ng.connect(a.destination);
+    [o,o2,lfo].forEach(x=>{x.start(t0); x.stop(t0+dur+.05);}); n.start(t0);
+  } catch(e) {}
+}
+function playSeq(ms, gap=.42){ ms.forEach((m,i)=>tone(m, i*gap, gap*.95)); }
+
+/* ================= storage ================= */
+const KEY = "khlui_v1";
+let store = { saved: [], tab: "notes", note: 60 };
+try { const raw = localStorage.getItem(KEY); if (raw) store = Object.assign(store, JSON.parse(raw)); } catch(e) {}
+function persist(){ try { localStorage.setItem(KEY, JSON.stringify(store)); } catch(e) {} }
+
+/* ================= song text parsing =================
+   Melody text format (as on noobnotes.net): note lines like "D - D  E  ^C  .A  F#"
+   followed by a lyric line. ^ = octave up, * = two octaves up, . = octave down. */
+const NOTE_RE = /^([.^*]*)([A-G])([#b]?)$/;
+function parseToken(tok){
+  const mm = NOTE_RE.exec(tok); if (!mm) return null;
+  const base = {C:0,D:2,E:4,F:5,G:7,A:9,B:11}[mm[2]] + (mm[3]==="#"?1:mm[3]==="b"?-1:0);
+  let oct = 0; for (const c of mm[1]) oct += c==="^"?1:c==="*"?2:-1;
+  return 60 + base + 12*oct;
+}
+function noteTokens(line){
+  return line.replace(/[–—~(),|]/g," ").split(/[\s\-]+/).filter(Boolean);
+}
+function isNoteLine(line){
+  const toks = noteTokens(line); if (!toks.length) return false;
+  const ok = toks.filter(t=>NOTE_RE.test(t)).length;
+  return ok >= 1 && ok / toks.length >= .7;
+}
+function parseMelody(text){
+  const raw = text.split(/\n/).map(s=>s.replace(/ /g," ").trim());
+  const lines = [];
+  for (let i=0;i<raw.length;i++){
+    if (!isNoteLine(raw[i])) continue;
+    const notes = noteTokens(raw[i]).map(parseToken).filter(x=>x!=null);
+    let lyric = "";
+    if (raw[i+1] && !isNoteLine(raw[i+1])) { lyric = raw[i+1]; i++; }
+    if (notes.length) lines.push({ notes, lyric });
+  }
+  return lines;
+}
+function htmlToText(html){
+  const tmp = html.replace(/<br\s*\/?>/gi,"\n").replace(/<\/p>/gi,"\n").replace(/<!--[\s\S]*?-->/g,"");
+  const doc = new DOMParser().parseFromString(tmp, "text/html");
+  return doc.body.textContent || "";
+}
+function decode(s){ return new DOMParser().parseFromString(s,"text/html").body.textContent || ""; }
+
+/* Pick the shift (in semitones) that keeps the song inside the khlui's range with as few half-holes as possible. */
+function autoShift(lines){
+  const all = lines.flatMap(l=>l.notes); if (!all.length) return 0;
+  let best = 0, bestCost = Infinity;
+  for (let s=-24;s<=24;s++){
+    let c = Math.abs(s)*.01;
+    for (const m of all){ const x = m+s; c += (x<LOW||x>HIGH) ? 10 : isNatural(x) ? 0 : 3; }
+    if (c < bestCost){ bestCost = c; best = s; }
+  }
+  return best;
+}
+function fit(m){ // fold out-of-range notes back in by octaves
+  let x = m, moved = false;
+  while (x < LOW){ x += 12; moved = true; } while (x > HIGH){ x -= 12; moved = true; }
+  return { m:x, moved };
+}
+
+/* ================= starter songs (public domain) ================= */
+const STARTERS = [
+  { id:"s-scale", title:"The khlui scale", artist:"Warm-up", text:
+`C D E F G A B ^C
+Up the low notes
+^C ^D ^E ^F ^G
+Now the high notes — blow a little stronger
+^G ^F ^E ^D ^C B A G F E D C
+And all the way back down`},
+  { id:"s-mary", title:"Mary Had a Little Lamb", artist:"Traditional", text:
+`E D C D E E E
+Mary had a little lamb
+D D D E G G
+Little lamb, little lamb
+E D C D E E E
+Mary had a little lamb
+E D D E D C
+Its fleece was white as snow`},
+  { id:"s-twinkle", title:"Twinkle Twinkle Little Star", artist:"Traditional", text:
+`C C G G A A G
+Twinkle, twinkle, little star
+F F E E D D C
+How I wonder what you are
+G G F F E E D
+Up above the world so high
+G G F F E E D
+Like a diamond in the sky
+C C G G A A G
+Twinkle, twinkle, little star
+F F E E D D C
+How I wonder what you are`},
+  { id:"s-ode", title:"Ode to Joy", artist:"Beethoven", text:
+`E E F G G F E D
+C C D E E D D
+E E F G G F E D
+C C D E D C C
+D D E C D E F E C
+D E F E D C D G
+E E F G G F E D
+C C D E D C C`},
+  { id:"s-bday", title:"Happy Birthday", artist:"Traditional", text:
+`G G A G ^C B
+Happy birthday to you
+G G A G ^D ^C
+Happy birthday to you
+G G ^G ^E ^C B A
+Happy birthday dear friend
+^F ^F ^E ^C ^D ^C
+Happy birthday to you`},
+];
+
+/* ================= UI: tabs ================= */
+const $ = s => document.querySelector(s);
+function showTab(t){
+  store.tab = t; persist();
+  ["notes","songs","chords"].forEach(x=>$("#tab-"+x).classList.toggle("hidden", x!==t));
+  document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on", b.dataset.tab===t));
+  window.scrollTo(0,0);
+}
+document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
+
+/* ================= UI: notes ================= */
+function noteBtn(m, cls){
+  const t = thaiName(m);
+  return `<button class="nbtn ${cls}" data-m="${m}"><span class="th">${t.th}</span><span class="lt">${noteName(m)}</span></button>`;
+}
+function renderNotes(){
+  $("#gridLow").innerHTML = NATURALS.slice(0,7).map(m=>noteBtn(m,"")).join("");
+  $("#gridHigh").innerHTML = NATURALS.slice(7).map(m=>noteBtn(m,"high")).join("");
+  const sh = []; for (let m=LOW;m<=HIGH;m++) if (!isNatural(m)) sh.push(m);
+  $("#gridSharp").innerHTML = sh.map(m=>noteBtn(m,"sharp")).join("");
+  selectNote(store.note || 60, false);
+}
+function selectNote(m, sound=true){
+  store.note = m; persist();
+  document.querySelectorAll(".nbtn").forEach(b=>b.classList.toggle("on", +b.dataset.m===m));
+  $("#bigFinger").innerHTML = fingerPanel(m, `<button class="btn leaf sm" style="margin-top:12px" id="hearNote">▶ Hear it</button>`);
+  $("#hearNote").onclick = ()=>tone(m, 0, 1.1);
+  if (sound) tone(m, 0, .9);
+}
+document.addEventListener("click", e=>{
+  const b = e.target.closest(".nbtn"); if (b) selectNote(+b.dataset.m);
+});
+
+/* ================= UI: songs ================= */
+const ICON_NOTE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>`;
+function itemHTML(s, attr){
+  return `<button class="item" ${attr}><span class="ic">${ICON_NOTE}</span><span class="grow"><div class="tt">${esc(s.title)}</div><div class="st">${esc(s.artist||"")}</div></span><span class="chev">›</span></button>`;
+}
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function splitTitle(t){
+  const parts = t.split(/\s+[–-]\s+/);
+  return parts.length > 1 ? { title: parts[0], artist: parts.slice(1).join(" – ") } : { title: t, artist: "" };
+}
+function renderSongLists(){
+  $("#starterList").innerHTML = STARTERS.map((s,i)=>itemHTML(s,`data-starter="${i}"`)).join("");
+  $("#savedList").innerHTML = store.saved.length
+    ? store.saved.map((s,i)=>itemHTML(s,`data-saved="${i}"`)).join("")
+    : `<p class="sub" style="margin:0">Tap the heart on any song to keep it here — saved songs work without internet.</p>`;
+}
+document.addEventListener("click", e=>{
+  const st = e.target.closest("[data-starter]");
+  if (st){ const s = STARTERS[+st.dataset.starter]; openSong({ id:s.id, title:s.title, artist:s.artist, lines:parseMelody(s.text), source:"" }); return; }
+  const sv = e.target.closest("[data-saved]");
+  if (sv){ openSong(store.saved[+sv.dataset.saved]); return; }
+  const rs = e.target.closest("[data-result]");
+  if (rs){ openSong(lastResults[+rs.dataset.result]); }
+});
+
+let lastResults = [], searchId = 0;
+$("#searchForm").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const q = $("#q").value.trim(); if (!q) return;
+  $("#q").blur();
+  const my = ++searchId, out = $("#results");
+  out.innerHTML = `<div class="list"><div class="notice"><span class="spinner"></span>&nbsp; Looking for “${esc(q)}”…</div></div>`;
+  try {
+    const url = "https://noobnotes.net/wp-json/wp/v2/posts?per_page=15&_fields=id,title,content,link&search=" + encodeURIComponent(q);
+    const ctrl = new AbortController(), to = setTimeout(()=>ctrl.abort(), 12000);
+    const res = await fetch(url, { signal: ctrl.signal }); clearTimeout(to);
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    if (my !== searchId) return;
+    lastResults = data.map(p=>{
+      const tt = splitTitle(decode(p.title.rendered));
+      return { id:"nn-"+p.id, title:tt.title, artist:tt.artist, lines:parseMelody(htmlToText(p.content.rendered)), source:p.link };
+    }).filter(s=>s.lines.length >= 2);
+    const ql = q.toLowerCase(), rank = s => s.title.toLowerCase()===ql ? 0 : s.title.toLowerCase().includes(ql) ? 1 : 2;
+    lastResults.sort((a,b)=>rank(a)-rank(b));
+    out.innerHTML = lastResults.length
+      ? `<div class="list">${lastResults.map((s,i)=>itemHTML(Object.assign({},s,{artist:(s.artist?s.artist+" · ":"")+s.lines.reduce((a,l)=>a+l.notes.length,0)+" notes"}),`data-result="${i}"`)).join("")}</div>`
+      : `<div class="list"><div class="notice">No melody found for “${esc(q)}”. Try just the song title, a different spelling, or the artist name. If you find the song's <b>chords</b> elsewhere, paste them in the Chords tab.</div></div>`;
+  } catch(err){
+    if (my !== searchId) return;
+    out.innerHTML = `<div class="list"><div class="notice err">Couldn't reach the song library${navigator.onLine===false?" — you're offline":""}. Check your connection and try again. Saved songs and the starter tunes still work.</div></div>`;
+  }
+});
+
+/* ================= UI: player ================= */
+let cur = null; // { song, shift, flat:[{li, ni, m}], pos }
+function openSong(song){
+  if (!song || !song.lines || !song.lines.length) return;
+  const flat = [];
+  song.lines.forEach((l,li)=>l.notes.forEach((m,ni)=>flat.push({li,ni,m})));
+  cur = { song, shift: song.shift != null ? song.shift : autoShift(song.lines), flat, pos: 0 };
+  $("#pTitle").innerHTML = `${esc(song.title)}<small>${esc(song.artist||"")}</small>`;
+  $("#pSource").innerHTML = song.source ? `Melody from <a href="${esc(song.source)}" target="_blank" rel="noopener">noobnotes.net</a>` : "";
+  $("#player").classList.remove("hidden"); $("#player").scrollTop = 0;
+  document.body.style.overflow = "hidden";
+  renderPlayer();
+}
+function closeSong(){ $("#player").classList.add("hidden"); document.body.style.overflow = ""; cur = null; renderSongLists(); }
+function shifted(m){ return fit(m + cur.shift); }
+function isSaved(){ return cur && store.saved.some(s=>s.id===cur.song.id); }
+function renderPlayer(){
+  const { song, flat, pos } = cur, at = flat[pos], line = song.lines[at.li];
+  const n = shifted(at.m);
+  $("#pLyric").textContent = line.lyric || " ";
+  $("#pFinger").innerHTML = fingerPanel(n.m, n.moved ? `<div class="pill" style="margin-top:10px">↕ moved an octave to fit</div>` : "");
+  $("#pProg").style.width = ((pos+1)/flat.length*100) + "%";
+  $("#pStrip").innerHTML = line.notes.map((m,ni)=>{
+    const x = shifted(m), on = ni===at.ni, t = thaiName(x.m);
+    return `<button class="chip ${on?"on":""} ${x.moved?"warn":""}" data-ni="${ni}">${miniSVG(x.m)}<span class="th">${t.th}</span><span class="lt">${noteName(x.m)}</span></button>`;
+  }).join("");
+  const onChip = $("#pStrip .chip.on"); if (onChip) onChip.scrollIntoView({ inline:"center", block:"nearest", behavior:"smooth" });
+  $("#pLines").innerHTML = song.lines.map((l,li)=>`<button class="lineb ${li===at.li?"on":""}" data-li="${li}">
+     <div class="ln">${l.notes.map(m=>thaiName(shifted(m).m).th).join(" ")}</div>${l.lyric?`<div class="ly">${esc(l.lyric)}</div>`:""}</button>`).join("");
+  const k = cur.shift;
+  $("#pKey").innerHTML = `Shifted <b>${k>0?"+":""}${k}</b> half-steps ${k===autoShift(song.lines)?'<span class="pill leaf">best fit</span>':""}`;
+  const all = song.lines.flatMap(l=>l.notes).map(shifted);
+  const halves = all.filter(x=>!isNatural(x.m)).length, moved = all.filter(x=>x.moved).length;
+  const w = $("#pWarn");
+  if (halves || moved){
+    w.classList.remove("hidden");
+    w.innerHTML = [halves?`${halves} note${halves>1?"s need":" needs"} a half-hole — these are the tricky ones.`:"",
+                   moved?`${moved} note${moved>1?"s were":" was"} too high or low for the khlui and moved an octave (dashed).`:""].filter(Boolean).join(" ");
+  } else w.classList.add("hidden");
+  $("#pSave").classList.toggle("on", isSaved());
+  $("#pPrev").disabled = pos===0; $("#pNext").disabled = pos===flat.length-1;
+}
+function go(p, sound=true){ cur.pos = Math.max(0, Math.min(cur.flat.length-1, p)); renderPlayer(); if (sound) tone(shifted(cur.flat[cur.pos].m).m); }
+$("#pBack").onclick = closeSong;
+$("#pPrev").onclick = ()=>go(cur.pos-1);
+$("#pNext").onclick = ()=>go(cur.pos+1);
+$("#pPlay").onclick = ()=>tone(shifted(cur.flat[cur.pos].m).m, 0, 1);
+$("#pPlayLine").onclick = ()=>{ const l = cur.song.lines[cur.flat[cur.pos].li]; playSeq(l.notes.map(m=>shifted(m).m)); };
+$("#pStrip").addEventListener("click", e=>{
+  const c = e.target.closest(".chip"); if (!c) return;
+  const li = cur.flat[cur.pos].li; go(cur.flat.findIndex(f=>f.li===li && f.ni===+c.dataset.ni));
+});
+$("#pLines").addEventListener("click", e=>{
+  const b = e.target.closest(".lineb"); if (!b) return;
+  go(cur.flat.findIndex(f=>f.li===+b.dataset.li)); $("#player").scrollTo({ top:0, behavior:"smooth" });
+});
+function setShift(s){ cur.shift = s; const sv = store.saved.find(x=>x.id===cur.song.id); if (sv){ sv.shift = s; persist(); } renderPlayer(); }
+$("#kDown").onclick = ()=>setShift(cur.shift-1);
+$("#kUp").onclick = ()=>setShift(cur.shift+1);
+$("#kAuto").onclick = ()=>setShift(autoShift(cur.song.lines));
+$("#pSave").onclick = ()=>{
+  if (isSaved()) store.saved = store.saved.filter(s=>s.id!==cur.song.id);
+  else store.saved.unshift({ id:cur.song.id, title:cur.song.title, artist:cur.song.artist, lines:cur.song.lines, source:cur.song.source, shift:cur.shift });
+  persist(); renderPlayer();
+};
+// swipe left/right on the big fingering to move between notes
+(()=>{ let x0=null,y0=null; const el = $("#pFinger");
+  el.addEventListener("touchstart",e=>{x0=e.touches[0].clientX;y0=e.touches[0].clientY;},{passive:true});
+  el.addEventListener("touchend",e=>{ if(x0==null||!cur) return; const dx=e.changedTouches[0].clientX-x0, dy=e.changedTouches[0].clientY-y0;
+    if (Math.abs(dx)>45 && Math.abs(dx)>Math.abs(dy)*1.5) go(cur.pos + (dx<0?1:-1)); x0=null; });
+})();
+
+/* ================= UI: chords ================= */
+const CHORD_TYPES = [
+  { k:"",     label:"Major", iv:[0,4,7] },
+  { k:"m",    label:"Minor", iv:[0,3,7] },
+  { k:"7",    label:"7",     iv:[0,4,7,10] },
+  { k:"maj7", label:"maj7",  iv:[0,4,7,11] },
+  { k:"m7",   label:"m7",    iv:[0,3,7,10] },
+  { k:"sus4", label:"sus4",  iv:[0,5,7] },
+  { k:"sus2", label:"sus2",  iv:[0,2,7] },
+  { k:"dim",  label:"dim",   iv:[0,3,6] },
+];
+const ROLE = ["root","","","3rd","3rd","4th","5th","5th","","","7th","7th"];
+let chordRoot = 0, chordType = 0;
+function chordNotes(root, iv){
+  return iv.map(i=>{ let m = 60 + root + i; while (m > HIGH) m -= 12; return { m, iv:i }; });
+}
+function renderChord(){
+  $("#rootSeg").innerHTML = LETTERS.map((l,i)=>`<button class="${i===chordRoot?"on":""}" data-root="${i}">${l}</button>`).join("");
+  $("#typeSeg").innerHTML = CHORD_TYPES.map((t,i)=>`<button class="${i===chordType?"on":""}" data-type="${i}">${t.label}</button>`).join("");
+  const t = CHORD_TYPES[chordType], ns = chordNotes(chordRoot, t.iv);
+  $("#chordName").textContent = LETTERS[chordRoot] + t.k;
+  $("#chordDesc").textContent = ns.length + " notes";
+  $("#chordNotes").innerHTML = ns.map((n,i)=>{
+    const th = thaiName(n.m);
+    return `<button class="cn nbtn-chord" data-m="${n.m}"><span class="role">${i===0?"1 · root":(i+1)+" · "+(ROLE[n.iv]||"")}</span>${miniSVG(n.m)}<span class="th">${th.th}</span><span class="lt">${noteName(n.m)}${isNatural(n.m)?"":" · half"}</span></button>`;
+  }).join("");
+}
+$("#rootSeg").addEventListener("click",e=>{ const b=e.target.closest("button"); if(b){ chordRoot=+b.dataset.root; renderChord(); } });
+$("#typeSeg").addEventListener("click",e=>{ const b=e.target.closest("button"); if(b){ chordType=+b.dataset.type; renderChord(); } });
+$("#chordNotes").addEventListener("click",e=>{ const b=e.target.closest("[data-m]"); if(b){ selectNote(+b.dataset.m,false); tone(+b.dataset.m); showTab("notes"); } });
+$("#playChord").onclick = ()=>{ const ns = chordNotes(chordRoot, CHORD_TYPES[chordType].iv).map(n=>n.m); playSeq(ns.concat([ns[0]+12 <= HIGH ? ns[0]+12 : ns[0]])); };
+
+const CHORD_RE = /^([A-G])([#b]?)(maj7|m7|m|7|sus4|sus2|dim|min|M7)?/;
+function parseChord(tok){
+  const mm = CHORD_RE.exec(tok); if (!mm) return null;
+  let root = "C D EF G A B".indexOf(mm[1]); root += mm[2]==="#"?1:mm[2]==="b"?-1:0; root = (root+12)%12;
+  let q = mm[3]||""; if (q==="min") q="m"; if (q==="M7") q="maj7";
+  const t = CHORD_TYPES.find(x=>x.k===q) || CHORD_TYPES[0];
+  return { name: LETTERS[root]+t.k, notes: chordNotes(root, t.iv).map(n=>n.m) };
+}
+function renderProg(){
+  const toks = $("#progIn").value.split(/[\s,|/]+/).filter(Boolean);
+  const seen = new Set(), rows = [];
+  for (const t of toks){ const c = parseChord(t); if (c && !seen.has(c.name)){ seen.add(c.name); rows.push(c); } }
+  $("#progOut").innerHTML = rows.length ? rows.map(c=>`<div class="progrow"><div class="nm">${c.name}</div><div class="ns">${
+    c.notes.map(m=>`<button class="chip" data-pm="${m}">${miniSVG(m)}<span class="th">${thaiName(m).th}</span><span class="lt">${noteName(m)}</span></button>`).join("")
+  }</div><button class="btn sm ghost" data-pc="${c.notes.join(",")}" style="margin-left:auto">▶</button></div>`).join("")
+  : (toks.length ? `<div class="notice">I couldn't read any chord names there. Write them like <i>C  G  Am  F  D7</i>.</div>` : "");
+}
+$("#progIn").addEventListener("input", renderProg);
+$("#progOut").addEventListener("click", e=>{
+  const p = e.target.closest("[data-pc]"); if (p){ playSeq(p.dataset.pc.split(",").map(Number)); return; }
+  const n = e.target.closest("[data-pm]"); if (n) tone(+n.dataset.pm);
+});
+
+/* ================= boot ================= */
+renderNotes(); renderSongLists(); renderChord();
+showTab(["notes","songs","chords"].includes(store.tab) ? store.tab : "notes");
+if ("serviceWorker" in navigator && location.protocol !== "file:") navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>
