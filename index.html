@@ -640,7 +640,7 @@ $("#searchForm").addEventListener("submit", async e=>{
   const my = ++searchId, out = $("#results");
   out.innerHTML = `<div class="list"><div class="notice"><span class="spinner"></span>&nbsp; Looking for “${esc(q)}”…</div></div>`;
   try {
-    const url = "https://noobnotes.net/wp-json/wp/v2/posts?per_page=15&_fields=id,title,content,link&search=" + encodeURIComponent(q);
+    const url = "https://noobnotes.net/wp-json/wp/v2/posts?per_page=15&orderby=relevance&_fields=id,title,content,link&search=" + encodeURIComponent(q);
     const ctrl = new AbortController(), to = setTimeout(()=>ctrl.abort(), 12000);
     const res = await fetch(url, { signal: ctrl.signal }); clearTimeout(to);
     if (!res.ok) throw new Error("HTTP " + res.status);
