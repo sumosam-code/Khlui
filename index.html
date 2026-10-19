@@ -143,13 +143,23 @@ nav.tabs button.on{color:var(--leaf-300);background:rgba(90,154,63,.12)}
 .chip.on{background:var(--leaf-700);border-color:var(--leaf-300)}
 .chip.on .lt{color:var(--leaf-200)}
 .chip.warn{border-style:dashed}
+.chip .wd{font-size:13px;font-weight:600;color:var(--tx-1);white-space:nowrap;max-width:80px;overflow:hidden;text-overflow:ellipsis}
+.chip .wd.held{color:var(--tx-5)}
+.lyric .w{border-radius:6px;padding:0 3px}
+.lyric .w.on{color:var(--leaf-950);background:var(--leaf-400)}
+.cells{display:flex;flex-wrap:wrap;gap:6px 2px}
+.cell{display:flex;flex-direction:column;align-items:center;min-width:24px;padding:3px 4px;border-radius:8px}
+.cell .n{font-family:var(--hd);font-size:15px;line-height:1.1;color:var(--leaf-300)}
+.cell .w{font-size:13px;line-height:1.2;color:var(--tx-2);white-space:nowrap}
+.cell .w.held{color:var(--tx-5)}
+.cell.on{background:var(--leaf-700)} .cell.on .w{color:var(--leaf-200)}
 .mini{display:block}
 .navbtns{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:10px;margin-top:12px}
 .navbtns .btn{min-height:58px;font-size:16px}
 .kbar{display:flex;align-items:center;gap:8px;justify-content:space-between;margin-top:6px;flex-wrap:wrap}
 .kbar .kv{font-size:14px;color:var(--tx-2)}
 .lines{display:flex;flex-direction:column;gap:6px;margin-top:6px}
-.lineb{border:1px solid var(--bark-600);background:var(--bark-800);border-radius:12px;padding:9px 12px;text-align:left;width:100%}
+.lineb{border:1px solid var(--bark-600);background:var(--bark-800);border-radius:12px;padding:8px 8px;text-align:left;width:100%}
 .lineb.on{border-color:var(--leaf-500);background:rgba(63,122,47,.15)}
 .lineb .ln{font-family:var(--hd);font-size:15px;color:var(--leaf-300);word-spacing:3px}
 .lineb .ly{font-size:13px;color:var(--tx-3);margin-top:2px}
@@ -485,18 +495,77 @@ function isNoteLine(line){
   const ok = toks.filter(t=>NOTE_RE.test(t)).length;
   return ok >= 1 && ok / toks.length >= .7;
 }
+/* Notes joined by dashes ("D–D") belong to one word, so keep each line's group sizes for lining up the words. */
+function noteGroups(line){
+  return line.replace(/[–—]/g,"-").replace(/\s*-\s*/g,"-").replace(/[~(),|]/g," ").split(/\s+/)
+    .map(g=>g.split("-").map(parseToken).filter(x=>x!=null)).filter(g=>g.length);
+}
 function parseMelody(text){
-  const raw = text.split(/\n/).map(s=>s.replace(/ /g," ").trim());
+  // blank lines dropped: the song site puts an empty line between each row of notes and its words
+  const raw = text.split(/\n/).map(s=>s.replace(/ /g," ").trim()).filter(Boolean);
   const lines = [];
   for (let i=0;i<raw.length;i++){
     if (!isNoteLine(raw[i])) continue;
-    const notes = noteTokens(raw[i]).map(parseToken).filter(x=>x!=null);
+    const groups = noteGroups(raw[i]), notes = groups.flat();
     let lyric = "";
     if (raw[i+1] && !isNoteLine(raw[i+1])) { lyric = raw[i+1]; i++; }
-    if (notes.length) lines.push({ notes, lyric });
+    if (notes.length) lines.push({ notes, groups: groups.map(g=>g.length), lyric });
   }
   return lines;
 }
+
+/* ---- words under notes ---- */
+function lyricWords(lyric){ return (lyric||"").split(/\s+/).filter(w=>/[\p{L}\p{N}]/u.test(w)); }
+/* Rough English syllable split, only used to place words under notes: vowel groups are the syllables,
+   a silent final "e" doesn't count, "-ble/-tle" endings keep their consonant, and the consonants between two
+   vowels split so the next syllable starts with the longest natural opening (th, pr, str…). */
+const ONSETS = new Set("bl br ch cl cr dr fl fr gl gr kn pl pr qu sc sh sk sl sm sn sp st sw th tr tw wh wr ph scr spl spr str thr shr squ".split(" "));
+function syllables(w){
+  const core = w.replace(/[^\p{L}']/gu,""), lw = core.toLowerCase();
+  const isV = i => /[aeiou]/.test(lw[i]) || (lw[i]==="y" && i>0);
+  const nuclei = [];
+  for (let i=0;i<lw.length;i++) if (isV(i)) { const st=i; while (i+1<lw.length && isV(i+1)) i++; nuclei.push([st,i]); }
+  const n = nuclei.length, last = nuclei[n-1];
+  const leEnd = /[^aeiouy]le$/.test(lw) && lw.length > 3;
+  if (n > 1 && !leEnd && last[0]===lw.length-1 && lw.endsWith("e") && last[0]===last[1]) nuclei.pop();
+  if (nuclei.length < 2) return [w];
+  const cuts = [];
+  for (let k=1;k<nuclei.length;k++){
+    const c0 = nuclei[k-1][1]+1, c1 = nuclei[k][0]; let cut = c1 - 1;   // default: one consonant opens the next syllable
+    if (c1 - c0 === 0) cut = c1;
+    else if (leEnd && k === nuclei.length-1) cut = c1 - 2;             // lit|tle, twin|kle
+    else for (let L=Math.min(3,c1-c0); L>=2; L--) if (ONSETS.has(lw.slice(c1-L,c1))) { cut = c1-L; break; }
+    cuts.push(Math.max(c0, cut));
+  }
+  const out = []; let prev = 0;
+  cuts.forEach(c=>{ out.push(core.slice(prev,c)); prev = c; }); out.push(core.slice(prev));
+  return out.filter(Boolean);
+}
+/* One entry per note: { t: text to show under it, wi: index of the word it belongs to, held: true when the note just holds the previous word } */
+function alignWords(line){
+  const N = line.notes.length, words = lyricWords(line.lyric);
+  const out = Array.from({length:N}, ()=>({ t:"", wi:-1, held:false }));
+  if (!words.length) return out;
+  const g = line.groups;
+  if (g && g.length === words.length){
+    let k = 0;
+    g.forEach((size, wi)=>{
+      const sy = syllables(words[wi]);
+      for (let j=0;j<size;j++)
+        out[k+j] = sy.length === size ? { t: sy[j] + (j<size-1?"-":""), wi, held:false }
+                 : j === 0 ? { t: words[wi], wi, held:false } : { t:"~", wi, held:true };
+      k += size;
+    });
+    return out;
+  }
+  // otherwise spread the syllables evenly over the notes
+  const syl = [];
+  words.forEach((w,wi)=>{ const s = syllables(w); s.forEach((x,j)=>syl.push({ t: x + (j<s.length-1?"-":""), wi })); });
+  syl.forEach((x,j)=>{ const i = Math.min(N-1, Math.floor(j*N/syl.length)); if (out[i].wi < 0) out[i].wi = x.wi; out[i].t += x.t; });
+  for (let i=0;i<N;i++) if (!out[i].t) out[i] = { t:"~", wi: i ? out[i-1].wi : -1, held:true };
+  return out;
+}
+
 function htmlToText(html){
   const tmp = html.replace(/<br\s*\/?>/gi,"\n").replace(/<\/p>/gi,"\n").replace(/<!--[\s\S]*?-->/g,"");
   const doc = new DOMParser().parseFromString(tmp, "text/html");
@@ -525,32 +594,29 @@ function fit(m){ // fold out-of-range notes back in by octaves
 const STARTERS = [
   { id:"s-scale", title:"The khlui scale", artist:"Warm-up", text:
 `C D E F G A B ^C
-Up the low notes
 ^C ^D ^E ^F ^G
-Now the high notes — blow a little stronger
-^G ^F ^E ^D ^C B A G F E D C
-And all the way back down`},
+^G ^F ^E ^D ^C B A G F E D C`},
   { id:"s-mary", title:"Mary Had a Little Lamb", artist:"Traditional", text:
-`E D C D E E E
+`E-D C D E-E E
 Mary had a little lamb
-D D D E G G
+D-D D E-G G
 Little lamb, little lamb
-E D C D E E E
+E-D C D E-E E
 Mary had a little lamb
 E D D E D C
 Its fleece was white as snow`},
   { id:"s-twinkle", title:"Twinkle Twinkle Little Star", artist:"Traditional", text:
-`C C G G A A G
+`C-C G-G A-A G
 Twinkle, twinkle, little star
-F F E E D D C
+F F E-E D D C
 How I wonder what you are
-G G F F E E D
+G G-F F E E D
 Up above the world so high
-G G F F E E D
+G G F-F E E D
 Like a diamond in the sky
-C C G G A A G
+C-C G-G A-A G
 Twinkle, twinkle, little star
-F F E E D D C
+F F E-E D D C
 How I wonder what you are`},
   { id:"s-ode", title:"Ode to Joy", artist:"Beethoven", text:
 `E E F G G F E D
@@ -562,13 +628,13 @@ D E F E D C D G
 E E F G G F E D
 C C D E D C C`},
   { id:"s-bday", title:"Happy Birthday", artist:"Traditional", text:
-`G G A G ^C B
+`G-G A-G ^C B
 Happy birthday to you
-G G A G ^D ^C
+G-G A-G ^D ^C
 Happy birthday to you
-G G ^G ^E ^C B A
+G-G ^G-^E ^C B-A
 Happy birthday dear friend
-^F ^F ^E ^C ^D ^C
+^F-^F ^E-^C ^D ^C
 Happy birthday to you`},
 ];
 
@@ -703,12 +769,25 @@ function openSong(song){
   if (!song || !song.lines || !song.lines.length) return;
   const flat = [];
   song.lines.forEach((l,li)=>l.notes.forEach((m,ni)=>flat.push({li,ni,m})));
-  cur = { song, shift: song.shift != null ? song.shift : autoShift(song.lines), flat, pos: 0 };
+  cur = { song, shift: song.shift != null ? song.shift : autoShift(song.lines), flat, pos: 0, words: song.lines.map(alignWords) };
   $("#pTitle").innerHTML = `${esc(song.title)}<small>${esc(song.artist||"")}</small>`;
   $("#pSource").innerHTML = song.source ? `Melody from <a href="${esc(song.source)}" target="_blank" rel="noopener">noobnotes.net</a>` : "";
   $("#player").classList.remove("hidden"); $("#player").scrollTop = 0;
   document.body.style.overflow = "hidden";
   renderPlayer();
+  refreshWords(song);
+}
+/* Songs saved before words were read properly have no lyrics: quietly re-fetch them once, keeping the user's key. */
+async function refreshWords(song){
+  if (!/^nn-\d+$/.test(song.id || "") || song.lines.some(l=>l.groups)) return;
+  try {
+    const data = await nnFetch(`include=${song.id.slice(3)}&_fields=id,content`);
+    const lines = data.length ? parseMelody(htmlToText(data[0].content.rendered)) : [];
+    if (!lines.length) return;
+    song.lines = lines;
+    const sv = store.saved.find(x=>x.id===song.id); if (sv){ sv.lines = lines; persist(); }
+    if (cur && cur.song === song){ const pos = cur.pos; openSong(song); go(Math.min(pos, cur.flat.length-1), false); }
+  } catch(e) {}
 }
 function closeSong(){ $("#player").classList.add("hidden"); document.body.style.overflow = ""; cur = null; renderSongLists(); }
 function shifted(m){ return fit(m + cur.shift); }
@@ -716,16 +795,18 @@ function isSaved(){ return cur && store.saved.some(s=>s.id===cur.song.id); }
 function renderPlayer(){
   const { song, flat, pos } = cur, at = flat[pos], line = song.lines[at.li];
   const n = shifted(at.m);
-  $("#pLyric").textContent = line.lyric || " ";
+  const al = cur.words[at.li], here = al[at.ni];
+  $("#pLyric").innerHTML = lyricWords(line.lyric).map((w,wi)=>`<span class="w ${wi===here.wi?"on":""}">${esc(w)}</span>`).join(" ") || "&nbsp;";
   $("#pFinger").innerHTML = fingerPanel(n.m, n.moved ? `<div class="pill" style="margin-top:10px">↕ moved an octave to fit</div>` : "");
   $("#pProg").style.width = ((pos+1)/flat.length*100) + "%";
   $("#pStrip").innerHTML = line.notes.map((m,ni)=>{
     const x = shifted(m), on = ni===at.ni;
-    return `<button class="chip ${on?"on":""} ${x.moved?"warn":""}" data-ni="${ni}">${miniSVG(x.m)}<span class="th">${noteName(x.m)}</span><span class="lt">${solfa(x.m)}</span></button>`;
+    return `<button class="chip ${on?"on":""} ${x.moved?"warn":""}" data-ni="${ni}">${miniSVG(x.m)}<span class="th">${noteName(x.m)}</span><span class="wd ${al[ni].held?"held":""}">${esc(al[ni].t)||"&nbsp;"}</span></button>`;
   }).join("");
   const onChip = $("#pStrip .chip.on"); if (onChip) onChip.scrollIntoView({ inline:"center", block:"nearest", behavior:"smooth" });
   $("#pLines").innerHTML = song.lines.map((l,li)=>`<button class="lineb ${li===at.li?"on":""}" data-li="${li}">
-     <div class="ln">${l.notes.map(m=>noteName(shifted(m).m)).join(" ")}</div>${l.lyric?`<div class="ly">${esc(l.lyric)}</div>`:""}</button>`).join("");
+     <div class="cells">${l.notes.map((m,ni)=>{ const wd = cur.words[li][ni];
+       return `<span class="cell ${li===at.li&&ni===at.ni?"on":""}"><span class="n">${noteName(shifted(m).m)}</span><span class="w ${wd.held?"held":""}">${esc(wd.t)||"&nbsp;"}</span></span>`; }).join("")}</div></button>`).join("");
   const k = cur.shift;
   $("#pKey").innerHTML = `Shifted <b>${k>0?"+":""}${k}</b> half-steps ${k===autoShift(song.lines)?'<span class="pill leaf">best fit</span>':""}`;
   const all = song.lines.flatMap(l=>l.notes).map(shifted);
