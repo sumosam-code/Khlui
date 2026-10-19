@@ -1,5 +1,5 @@
 // Bump CACHE on every deployed change, or phones keep serving the old version.
-const CACHE = "khlui-v2";
+const CACHE = "khlui-v3";
 const SHELL = ["./", "index.html", "manifest.webmanifest", "icon.svg", "icon-180.png", "icon-512.png"];
 const FONT_HOSTS = ["fonts.googleapis.com", "fonts.gstatic.com"];
 

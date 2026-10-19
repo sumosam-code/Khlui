@@ -193,7 +193,7 @@ textarea.prog:focus{border-color:var(--leaf-500)}
     </svg>
     <div class="brand">
       <h1>Khlui</h1>
-      <div class="th">ขลุ่ย · Thai bamboo flute</div>
+      <div class="th">Thai bamboo flute</div>
     </div>
   </header>
   <svg class="vine" viewBox="0 0 400 22" preserveAspectRatio="none" aria-hidden="true">
@@ -214,7 +214,7 @@ textarea.prog:focus{border-color:var(--leaf-500)}
       </div>
     </div>
     <div class="card">
-      <h2>Pick a note <span class="th">เลือกเสียง</span></h2>
+      <h2>Pick a note</h2>
       <p class="sub">Tap a note to see where your fingers go and hear how it should sound.</p>
       <div class="reglabel">Low · gentle breath</div>
       <div class="notes" id="gridLow"></div>
@@ -224,7 +224,7 @@ textarea.prog:focus{border-color:var(--leaf-500)}
       <div class="notes" id="gridSharp"></div>
     </div>
     <div class="card">
-      <h2>How to hold it <span class="th">วิธีจับ</span></h2>
+      <h2>How to hold it</h2>
       <p class="sub" style="margin-bottom:0">
         Hold the khlui pointing down, mouthpiece at your lips. <b>Left hand on top</b>: thumb covers the hole on the back, index / middle / ring
         fingers cover holes 1–3. <b>Right hand below</b>: index / middle / ring / little fingers cover holes 4–7.
@@ -237,7 +237,7 @@ textarea.prog:focus{border-color:var(--leaf-500)}
   <!-- ===== SONGS ===== -->
   <section id="tab-songs" class="hidden">
     <div class="card leafy">
-      <h2>Find a song <span class="th">ค้นหาเพลง</span></h2>
+      <h2>Find a song</h2>
       <p class="sub">Type a song name. Khlui looks up the melody online and turns every note into a fingering.</p>
       <form class="search" id="searchForm" autocomplete="off">
         <input id="q" type="search" placeholder="e.g. Hallelujah, Perfect, Let it go" enterkeyhint="search">
@@ -246,11 +246,11 @@ textarea.prog:focus{border-color:var(--leaf-500)}
       <div id="results"></div>
     </div>
     <div class="card">
-      <h2>My songs <span class="th">เพลงของฉัน</span></h2>
+      <h2>My songs</h2>
       <div class="list" id="savedList"></div>
     </div>
     <div class="card">
-      <h2>Start here <span class="th">เริ่มต้น</span></h2>
+      <h2>Start here</h2>
       <p class="sub">Simple tunes that sit comfortably on the khlui. They work offline.</p>
       <div class="list" id="starterList"></div>
     </div>
@@ -259,7 +259,7 @@ textarea.prog:focus{border-color:var(--leaf-500)}
   <!-- ===== CHORDS ===== -->
   <section id="tab-chords" class="hidden">
     <div class="card leafy">
-      <h2>Chords <span class="th">คอร์ด</span></h2>
+      <h2>Chords</h2>
       <p class="sub">The khlui plays one note at a time, so a chord is played as its notes <b>one after another</b> (an arpeggio) —
         or just play the first note (the root) when the chord changes. Pick a chord:</p>
       <div class="seg" id="rootSeg"></div>
@@ -272,7 +272,7 @@ textarea.prog:focus{border-color:var(--leaf-500)}
       <div class="chordnotes" id="chordNotes"></div>
     </div>
     <div class="card">
-      <h2>Paste chords from any site <span class="th">วางคอร์ด</span></h2>
+      <h2>Paste chords from any site</h2>
       <p class="sub">Found a song's chords on a guitar site? Paste them here (e.g. <i>C G Am F</i>) and see the khlui notes for each one.</p>
       <textarea class="prog" id="progIn" placeholder="C  G  Am  F"></textarea>
       <div id="progOut" style="margin-top:6px"></div>
@@ -324,9 +324,9 @@ textarea.prog:focus{border-color:var(--leaf-500)}
 
 <nav class="tabs">
   <div class="inner">
-    <button data-tab="notes" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="20" rx="3"/><circle cx="12" cy="9" r="1" fill="currentColor"/><circle cx="12" cy="13" r="1" fill="currentColor"/><circle cx="12" cy="17" r="1" fill="currentColor"/></svg><span class="t">Notes</span><span class="th">เสียง</span></button>
-    <button data-tab="songs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg><span class="t">Songs</span><span class="th">เพลง</span></button>
-    <button data-tab="chords"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c4 4 7 8 7 11a7 7 0 0 1-14 0c0-3 3-7 7-11z"/><path d="M12 21V9"/><path d="M12 14l3-3M12 17l-3-3"/></svg><span class="t">Chords</span><span class="th">คอร์ด</span></button>
+    <button data-tab="notes" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="20" rx="3"/><circle cx="12" cy="9" r="1" fill="currentColor"/><circle cx="12" cy="13" r="1" fill="currentColor"/><circle cx="12" cy="17" r="1" fill="currentColor"/></svg><span class="t">Notes</span></button>
+    <button data-tab="songs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg><span class="t">Songs</span></button>
+    <button data-tab="chords"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c4 4 7 8 7 11a7 7 0 0 1-14 0c0-3 3-7 7-11z"/><path d="M12 21V9"/><path d="M12 14l3-3M12 17l-3-3"/></svg><span class="t">Chords</span></button>
   </div>
 </nav>
 
@@ -336,18 +336,16 @@ textarea.prog:focus{border-color:var(--leaf-500)}
    Pitches are relative MIDI numbers where 60 = "do" (all holes covered).
    Khlui phiang aw range: 12 natural notes, do (60) up to high sol (79). */
 const LETTERS = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
-const SOLFA = {0:["ด","Do"],2:["ร","Re"],4:["ม","Mi"],5:["ฟ","Fa"],7:["ซ","Sol"],9:["ล","La"],11:["ท","Ti"]};
+const SOLFA = {0:"Do",2:"Re",4:"Mi",5:"Fa",7:"Sol",9:"La",11:"Ti"};
 const NATURALS = [60,62,64,65,67,69,71,72,74,76,77,79];
 const LOW = 60, HIGH = 79;
 const FINGER_NAMES = ["Left thumb (back)","Left index","Left middle","Left ring","Right index","Right middle","Right ring","Right little"];
 
 function isNatural(m){ return NATURALS.includes(m); }
 function noteName(m){ return LETTERS[((m % 12) + 12) % 12]; }
-function thaiName(m){
+function solfa(m){
   const pc = ((m%12)+12)%12;
-  if (SOLFA[pc]) return { th: SOLFA[pc][0], en: SOLFA[pc][1] };
-  const lo = SOLFA[pc-1];
-  return { th: lo[0] + "♯", en: lo[1] + " sharp" };
+  return SOLFA[pc] || SOLFA[pc-1] + "♯";
 }
 
 /* holes[0] = thumb, holes[1..7] = front holes top→bottom. 1 covered, 0 open, .5 half. */
@@ -432,10 +430,10 @@ function miniSVG(m){
   return s + `</svg>`;
 }
 function fingerPanel(m, extra){
-  const f = fingering(m), t = thaiName(m);
+  const f = fingering(m);
   return `${fluteSVG(m)}<div class="finfo">
-    <div class="big">${t.th}</div>
-    <div class="names"><b>${t.en}</b> · ${noteName(m)}${f.high?" (high)":""} ${f.half?'<span class="pill">half-hole</span>':""}</div>
+    <div class="big">${noteName(m)}</div>
+    <div class="names"><b>${solfa(m)}</b>${f.high?" · high":""} ${f.half?'<span class="pill">half-hole</span>':""}</div>
     <ul class="steps">${describe(m).map(x=>`<li>${x}</li>`).join("")}</ul>${extra||""}</div>`;
 }
 
@@ -586,8 +584,7 @@ document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("clic
 
 /* ================= UI: notes ================= */
 function noteBtn(m, cls){
-  const t = thaiName(m);
-  return `<button class="nbtn ${cls}" data-m="${m}"><span class="th">${t.th}</span><span class="lt">${noteName(m)}</span></button>`;
+  return `<button class="nbtn ${cls}" data-m="${m}"><span class="th">${noteName(m)}</span><span class="lt">${solfa(m)}</span></button>`;
 }
 function renderNotes(){
   $("#gridLow").innerHTML = NATURALS.slice(0,7).map(m=>noteBtn(m,"")).join("");
@@ -629,37 +626,76 @@ document.addEventListener("click", e=>{
   const sv = e.target.closest("[data-saved]");
   if (sv){ openSong(store.saved[+sv.dataset.saved]); return; }
   const rs = e.target.closest("[data-result]");
-  if (rs){ openSong(lastResults[+rs.dataset.result]); }
+  if (rs){ openResult(+rs.dataset.result, rs); }
 });
 
+/* Song search: a light titles-only request first, then the notes for the one song tapped.
+   Two addresses for the same API, in case a network filters /wp-json/. */
+const NN_BASES = ["https://noobnotes.net/wp-json/wp/v2/posts?", "https://noobnotes.net/?rest_route=/wp/v2/posts&"];
+async function nnFetch(params){
+  let lastErr = null;
+  for (const base of NN_BASES){
+    const ctrl = new AbortController(), to = setTimeout(()=>ctrl.abort(), 20000);
+    try {
+      const res = await fetch(base + params, { signal: ctrl.signal });
+      if (!res.ok) throw new Error(`the song site answered with error ${res.status}`);
+      const data = await res.json();
+      if (!Array.isArray(data)) throw new Error("the song site sent back something unexpected");
+      return data;
+    } catch(e){
+      lastErr = e.name === "AbortError" ? new Error("the song site took more than 20 seconds to answer")
+              : e instanceof TypeError ? new Error(`the connection to noobnotes.net failed (${e.message})`) : e;
+    } finally { clearTimeout(to); }
+  }
+  throw lastErr;
+}
+function errNotice(msg, retry){
+  return `<div class="list"><div class="notice err">${esc(msg)}${retry?`<div style="margin-top:10px"><button class="btn sm" data-retry="${retry}">Try again</button></div>`:""}</div></div>`;
+}
+
 let lastResults = [], searchId = 0;
-$("#searchForm").addEventListener("submit", async e=>{
-  e.preventDefault();
+async function runSearch(){
   const q = $("#q").value.trim(); if (!q) return;
   $("#q").blur();
   const my = ++searchId, out = $("#results");
   out.innerHTML = `<div class="list"><div class="notice"><span class="spinner"></span>&nbsp; Looking for “${esc(q)}”…</div></div>`;
   try {
-    const url = "https://noobnotes.net/wp-json/wp/v2/posts?per_page=15&orderby=relevance&_fields=id,title,content,link&search=" + encodeURIComponent(q);
-    const ctrl = new AbortController(), to = setTimeout(()=>ctrl.abort(), 12000);
-    const res = await fetch(url, { signal: ctrl.signal }); clearTimeout(to);
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const data = await res.json();
+    const data = await nnFetch("per_page=15&orderby=relevance&_fields=id,title,link&search=" + encodeURIComponent(q));
     if (my !== searchId) return;
     lastResults = data.map(p=>{
       const tt = splitTitle(decode(p.title.rendered));
-      return { id:"nn-"+p.id, title:tt.title, artist:tt.artist, lines:parseMelody(htmlToText(p.content.rendered)), source:p.link };
-    }).filter(s=>s.lines.length >= 2);
+      return { id:"nn-"+p.id, pid:p.id, title:tt.title, artist:tt.artist, source:p.link, lines:null };
+    });
     const ql = q.toLowerCase(), rank = s => s.title.toLowerCase()===ql ? 0 : s.title.toLowerCase().includes(ql) ? 1 : 2;
     lastResults.sort((a,b)=>rank(a)-rank(b));
     out.innerHTML = lastResults.length
-      ? `<div class="list">${lastResults.map((s,i)=>itemHTML(Object.assign({},s,{artist:(s.artist?s.artist+" · ":"")+s.lines.reduce((a,l)=>a+l.notes.length,0)+" notes"}),`data-result="${i}"`)).join("")}</div>`
+      ? `<div class="list">${lastResults.map((s,i)=>itemHTML(s,`data-result="${i}"`)).join("")}</div>`
       : `<div class="list"><div class="notice">No melody found for “${esc(q)}”. Try just the song title, a different spelling, or the artist name. If you find the song's <b>chords</b> elsewhere, paste them in the Chords tab.</div></div>`;
   } catch(err){
     if (my !== searchId) return;
-    out.innerHTML = `<div class="list"><div class="notice err">Couldn't reach the song library${navigator.onLine===false?" — you're offline":""}. Check your connection and try again. Saved songs and the starter tunes still work.</div></div>`;
+    const off = navigator.onLine === false;
+    out.innerHTML = errNotice(off ? "You're offline, so search can't reach the song library. Saved songs and the starter tunes still work."
+                                  : `Search didn't work: ${err.message}.`, "search");
   }
-});
+}
+async function openResult(i, btn){
+  const s = lastResults[i]; if (!s) return;
+  if (s.lines){ openSong(s); return; }
+  const chev = btn.querySelector(".chev"), old = chev.innerHTML;
+  chev.innerHTML = `<span class="spinner"></span>`;
+  try {
+    const data = await nnFetch(`include=${s.pid}&_fields=id,content`);
+    s.lines = data.length ? parseMelody(htmlToText(data[0].content.rendered)) : [];
+    chev.innerHTML = old;
+    if (s.lines.length) openSong(s);
+    else { chev.innerHTML = old; btn.insertAdjacentHTML("afterend", `<div class="notice">That page has no notes Khlui can read. Try another result.</div>`); }
+  } catch(err){
+    chev.innerHTML = old;
+    btn.insertAdjacentHTML("afterend", errNotice(`Couldn't load that song: ${err.message}.`, ""));
+  }
+}
+$("#searchForm").addEventListener("submit", e=>{ e.preventDefault(); runSearch(); });
+$("#results").addEventListener("click", e=>{ if (e.target.closest("[data-retry]")) runSearch(); });
 
 /* ================= UI: player ================= */
 let cur = null; // { song, shift, flat:[{li, ni, m}], pos }
@@ -684,12 +720,12 @@ function renderPlayer(){
   $("#pFinger").innerHTML = fingerPanel(n.m, n.moved ? `<div class="pill" style="margin-top:10px">↕ moved an octave to fit</div>` : "");
   $("#pProg").style.width = ((pos+1)/flat.length*100) + "%";
   $("#pStrip").innerHTML = line.notes.map((m,ni)=>{
-    const x = shifted(m), on = ni===at.ni, t = thaiName(x.m);
-    return `<button class="chip ${on?"on":""} ${x.moved?"warn":""}" data-ni="${ni}">${miniSVG(x.m)}<span class="th">${t.th}</span><span class="lt">${noteName(x.m)}</span></button>`;
+    const x = shifted(m), on = ni===at.ni;
+    return `<button class="chip ${on?"on":""} ${x.moved?"warn":""}" data-ni="${ni}">${miniSVG(x.m)}<span class="th">${noteName(x.m)}</span><span class="lt">${solfa(x.m)}</span></button>`;
   }).join("");
   const onChip = $("#pStrip .chip.on"); if (onChip) onChip.scrollIntoView({ inline:"center", block:"nearest", behavior:"smooth" });
   $("#pLines").innerHTML = song.lines.map((l,li)=>`<button class="lineb ${li===at.li?"on":""}" data-li="${li}">
-     <div class="ln">${l.notes.map(m=>thaiName(shifted(m).m).th).join(" ")}</div>${l.lyric?`<div class="ly">${esc(l.lyric)}</div>`:""}</button>`).join("");
+     <div class="ln">${l.notes.map(m=>noteName(shifted(m).m)).join(" ")}</div>${l.lyric?`<div class="ly">${esc(l.lyric)}</div>`:""}</button>`).join("");
   const k = cur.shift;
   $("#pKey").innerHTML = `Shifted <b>${k>0?"+":""}${k}</b> half-steps ${k===autoShift(song.lines)?'<span class="pill leaf">best fit</span>':""}`;
   const all = song.lines.flatMap(l=>l.notes).map(shifted);
@@ -756,8 +792,7 @@ function renderChord(){
   $("#chordName").textContent = LETTERS[chordRoot] + t.k;
   $("#chordDesc").textContent = ns.length + " notes";
   $("#chordNotes").innerHTML = ns.map((n,i)=>{
-    const th = thaiName(n.m);
-    return `<button class="cn nbtn-chord" data-m="${n.m}"><span class="role">${i===0?"1 · root":(i+1)+" · "+(ROLE[n.iv]||"")}</span>${miniSVG(n.m)}<span class="th">${th.th}</span><span class="lt">${noteName(n.m)}${isNatural(n.m)?"":" · half"}</span></button>`;
+    return `<button class="cn nbtn-chord" data-m="${n.m}"><span class="role">${i===0?"1 · root":(i+1)+" · "+(ROLE[n.iv]||"")}</span>${miniSVG(n.m)}<span class="th">${noteName(n.m)}</span><span class="lt">${solfa(n.m)}${isNatural(n.m)?"":" · half"}</span></button>`;
   }).join("");
 }
 $("#rootSeg").addEventListener("click",e=>{ const b=e.target.closest("button"); if(b){ chordRoot=+b.dataset.root; renderChord(); } });
@@ -778,7 +813,7 @@ function renderProg(){
   const seen = new Set(), rows = [];
   for (const t of toks){ const c = parseChord(t); if (c && !seen.has(c.name)){ seen.add(c.name); rows.push(c); } }
   $("#progOut").innerHTML = rows.length ? rows.map(c=>`<div class="progrow"><div class="nm">${c.name}</div><div class="ns">${
-    c.notes.map(m=>`<button class="chip" data-pm="${m}">${miniSVG(m)}<span class="th">${thaiName(m).th}</span><span class="lt">${noteName(m)}</span></button>`).join("")
+    c.notes.map(m=>`<button class="chip" data-pm="${m}">${miniSVG(m)}<span class="th">${noteName(m)}</span><span class="lt">${solfa(m)}</span></button>`).join("")
   }</div><button class="btn sm ghost" data-pc="${c.notes.join(",")}" style="margin-left:auto">▶</button></div>`).join("")
   : (toks.length ? `<div class="notice">I couldn't read any chord names there. Write them like <i>C  G  Am  F  D7</i>.</div>` : "");
 }
