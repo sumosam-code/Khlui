@@ -337,7 +337,7 @@ textarea.prog:focus{border-color:var(--leaf-500)}
     </div>
     <div class="card">
       <h3>Whole song</h3>
-      <div class="legend compact" style="margin:0 0 10px"><span><i class="o"></i>Leave open</span><span><i class="h"></i>Half cover</span><span>No mark: cover it</span><span><b>T</b>Thumb</span></div>
+      <div class="legend compact" style="margin:0 0 10px"><span><i class="h"></i><b>T</b>Half-cover the back hole with your thumb</span><span>No mark: thumb covers it</span></div>
       <div class="row" style="margin-bottom:8px"><button class="btn sm" id="pPlayLine">▶ Play this line</button></div>
       <div class="lines" id="pLines"></div>
       <div class="footer" id="pSource"></div>
@@ -449,13 +449,10 @@ function miniSVG(m){
   s += holePaint(f.holes[0], r, W-9, 39, "T", fs);
   return s + `</svg>`;
 }
-/* Compact form for the Whole song list: covered holes get no mark, only half-covered and open ones do. */
+/* Whole song list: only the thumb gets a mark, and only when it isn't simply covering the back hole. */
 function holeMarks(m){
-  const f = fingering(m), half = [], open = [];
-  f.holes.forEach((v,i)=>{ if (v === .5) half.push(i ? i : "T"); else if (v === 0) open.push(i); });
-  const marks = half.map(h=>`<span class="hm"><i class="h"></i>${h}</span>`);
-  if (open.length) marks.push(`<span class="hm"><i class="o"></i>${open.length > 1 ? open[0]+"–"+open[open.length-1] : open[0]}</span>`);
-  return marks.length ? `<span class="marks">${marks.join("")}</span>` : "";
+  const t = fingering(m).holes[0];
+  return t === 1 ? "" : `<span class="marks"><span class="hm"><i class="${t ? "h" : "o"}"></i>T</span></span>`;
 }
 function fingerPanel(m, extra){
   const f = fingering(m);
