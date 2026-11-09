@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Khlui</title>
 <meta name="description" content="Learn the Thai khlui flute: fingerings for every note, songs, and chords.">
 <meta name="theme-color" content="#120d08">
@@ -30,7 +30,7 @@
   --safe-b:env(safe-area-inset-bottom,0px); --safe-t:env(safe-area-inset-top,0px);
   --hd:"Mitr",system-ui,sans-serif; --bd:"Sarabun",-apple-system,system-ui,sans-serif;
 }
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:pan-x pan-y}
 html,body{margin:0;background:var(--bark-900);color:var(--tx-1);font-family:var(--bd);font-size:16px}
 body{min-height:100dvh;
   background:
@@ -152,6 +152,7 @@ nav.tabs button.on{color:var(--leaf-300);background:rgba(90,154,63,.12)}
 .cell .n{font-family:var(--hd);font-size:15px;line-height:1.1;color:var(--leaf-300)}
 .cell .w{font-size:13px;line-height:1.2;color:var(--tx-2);white-space:nowrap}
 .cell .w.held{color:var(--tx-5)}
+.cell svg.mini{width:42px;height:auto;margin-bottom:3px}
 .cell.on{background:var(--leaf-700)} .cell.on .w{color:var(--leaf-200)}
 .mini{display:block}
 .navbtns{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:10px;margin-top:12px}
@@ -332,6 +333,7 @@ textarea.prog:focus{border-color:var(--leaf-500)}
     </div>
     <div class="card">
       <h3>Whole song</h3>
+      <div class="legend" style="margin:0 0 10px"></div>
       <div class="row" style="margin-bottom:8px"><button class="btn sm" id="pPlayLine">▶ Play this line</button></div>
       <div class="lines" id="pLines"></div>
       <div class="footer" id="pSource"></div>
@@ -925,9 +927,16 @@ function renderPlayer(){
     return `<button class="chip ${on?"on":""} ${x.moved?"warn":""}" data-ni="${ni}">${miniSVG(x.m)}<span class="th">${noteName(x.m)}</span><span class="wd ${al[ni].held?"held":""}">${esc(al[ni].t)||"&nbsp;"}</span></button>`;
   }).join("");
   const onChip = $("#pStrip .chip.on"); if (onChip) onChip.scrollIntoView({ inline:"center", block:"nearest", behavior:"smooth" });
-  $("#pLines").innerHTML = song.lines.map((l,li)=>`<button class="lineb ${li===at.li?"on":""}" data-li="${li}">
-     <div class="cells">${l.notes.map((m,ni)=>{ const wd = cur.words[li][ni];
-       return `<span class="cell ${li===at.li&&ni===at.ni?"on":""}"><span class="n">${noteName(shifted(m).m)}</span><span class="w ${wd.held?"held":""}">${esc(wd.t)||"&nbsp;"}</span></span>`; }).join("")}</div></button>`).join("");
+  // a long song has hundreds of flutes, so only redraw them when the key changes; moving between notes just moves the highlight
+  if (cur.drawnShift !== cur.shift){
+    $("#pLines").innerHTML = song.lines.map((l,li)=>`<button class="lineb" data-li="${li}">
+     <div class="cells">${l.notes.map((m,ni)=>{ const wd = cur.words[li][ni], x = shifted(m).m;
+       return `<span class="cell">${miniSVG(x)}<span class="n">${noteName(x)}</span><span class="w ${wd.held?"held":""}">${esc(wd.t)||"&nbsp;"}</span></span>`; }).join("")}</div></button>`).join("");
+    cur.drawnShift = cur.shift;
+  }
+  $("#pLines").querySelectorAll(".lineb.on,.cell.on").forEach(x=>x.classList.remove("on"));
+  const onLine = $("#pLines").children[at.li];
+  onLine.classList.add("on"); onLine.querySelectorAll(".cell")[at.ni].classList.add("on");
   const k = cur.shift;
   $("#pKey").innerHTML = `Shifted <b>${k>0?"+":""}${k}</b> half-steps ${k===autoShift(song.lines)?'<span class="pill leaf">best fit</span>':""}`;
   const all = song.lines.flatMap(l=>l.notes).map(shifted);
@@ -1024,6 +1033,11 @@ $("#progOut").addEventListener("click", e=>{
   const p = e.target.closest("[data-pc]"); if (p){ playSeq(p.dataset.pc.split(",").map(Number)); return; }
   const n = e.target.closest("[data-pm]"); if (n) tone(+n.dataset.pm);
 });
+
+/* ================= no zooming =================
+   iPhone Safari can ignore user-scalable=no, so pinches are also stopped here; the touch-action rule covers double-taps. */
+["gesturestart","gesturechange","gestureend"].forEach(t=>document.addEventListener(t, e=>e.preventDefault(), { passive:false }));
+document.addEventListener("touchmove", e=>{ if (e.touches.length > 1) e.preventDefault(); }, { passive:false });
 
 /* ================= boot ================= */
 document.querySelectorAll(".legend").forEach(el=>{ el.innerHTML = `<span><i class="c"></i>Cover hole</span><span><i class="o"></i>Open</span><span><i class="h"></i>Half cover</span><span><b>T</b>Thumb, on the back</span>`; });
