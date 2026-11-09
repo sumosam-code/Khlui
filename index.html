@@ -642,6 +642,62 @@ Happy birthday dear friend
 Happy birthday to you`},
 ];
 
+/* Classical main themes (public domain), built in because the song site has no classical music. */
+const CLASSICAL = [
+  STARTERS.find(s=>s.id==="s-ode"),
+  { id:"c-nachtmusik", title:"Eine kleine Nachtmusik", artist:"Mozart", text:
+`G D G D G D G B ^D
+^C A ^C A ^C A F# A D`},
+  { id:"c-elise", title:"Für Elise", artist:"Beethoven", text:
+`^E ^D# ^E ^D# ^E B ^D ^C A
+C E A B
+E G# B ^C
+E ^E ^D# ^E ^D# ^E B ^D ^C A
+C E A B
+E ^C B A`},
+  { id:"c-canon", title:"Canon in D", artist:"Pachelbel", text:
+`^F# ^E ^D ^C# B A B ^C#
+^D ^C# B A G F# G E`},
+  { id:"c-spring", title:"Spring (The Four Seasons)", artist:"Vivaldi", text:
+`C E E E D C G
+G F E E E D C G
+G F E F G F E D`},
+  { id:"c-mountain", title:"In the Hall of the Mountain King", artist:"Grieg", text:
+`A B ^C ^D ^E ^C ^E
+^D# B ^D#
+^D Bb ^D
+A B ^C ^D ^E ^C ^E ^A
+^G ^E ^C ^E ^G`},
+  { id:"c-morning", title:"Morning Mood", artist:"Grieg", text:
+`G E D C D E
+G E D C D E D E
+G E G A E A G E D C`},
+  { id:"c-jesu", title:"Jesu, Joy of Man's Desiring", artist:"Bach", text:
+`G A B ^D ^C ^C ^E ^D ^D ^G ^F# ^G ^D B G
+A B ^C ^D ^E ^D ^C B A B G F# G A D F# A ^C B A B`},
+  { id:"c-minuet", title:"Minuet in G", artist:"Petzold", text:
+`^D G A B ^C ^D G G
+^E ^C ^D ^E ^F# ^G G G
+^C ^D ^C B A B ^C B A G
+F# G A B G A`},
+  { id:"c-largo", title:"Largo (New World Symphony)", artist:"Dvořák", text:
+`E G G E D C D E G E D
+E G G E D C D E D C C`},
+  { id:"c-lullaby", title:"Lullaby", artist:"Brahms", text:
+`E E G E E G
+E G ^C B A A G
+D E F D E F
+D F B A G B ^C`},
+  { id:"c-turkish", title:"Turkish March", artist:"Mozart", text:
+`B A G# A ^C
+^D ^C B ^C ^E
+^F ^E ^D# ^E ^B ^A ^G# ^A ^B ^A ^G# ^A ^^C`},
+  { id:"c-bridal", title:"Bridal Chorus", artist:"Wagner", text:
+`C F F F
+C G E F
+C F Bb Bb A G F E F G`},
+].sort((a,b)=>a.title.localeCompare(b.title));
+
 /* ================= UI: tabs ================= */
 const $ = s => document.querySelector(s);
 function showTab(t){
@@ -775,7 +831,7 @@ $("#results").addEventListener("click", e=>{
 
 /* Browse the song site's own categories, alphabetically, 30 songs at a time. */
 const GENRES = [
-  { id:9, label:"Pop" }, { id:22, label:"Rock" }, { id:11, label:"Film" }, { id:12, label:"Folk" },
+  { id:9, label:"Pop" }, { id:22, label:"Rock" }, { id:11, label:"Film" }, { id:"classical", label:"Classical", songs:CLASSICAL }, { id:12, label:"Folk" },
   { id:3, label:"Traditional" }, { id:10, label:"Modern" }, { id:13, label:"Seasonal" },
 ];
 const ERAS = [
@@ -788,7 +844,7 @@ function renderGenres(){
   $("#genreSeg").innerHTML = GENRES.map(chip).join("");
   $("#eraSeg").innerHTML = ERAS.map(chip).join("");
 }
-function markGenre(id){ document.querySelectorAll("[data-genre]").forEach(b=>b.classList.toggle("on", +b.dataset.genre===id)); }
+function markGenre(id){ document.querySelectorAll("[data-genre]").forEach(b=>b.classList.toggle("on", b.dataset.genre===String(id))); }
 function renderBrowse(extra){
   const { g, total } = browsing, more = lastResults.length < total;
   $("#results").innerHTML = `<div class="browsehd">${esc(g.label)}<span>${total} songs</span></div>
@@ -796,6 +852,13 @@ function renderBrowse(extra){
     ${more && !extra ? `<button class="btn" style="width:100%;margin-top:10px" data-more="1">Show more (${lastResults.length} of ${total})</button>` : ""}`;
 }
 async function browseGenre(g, page){
+  if (g.songs){
+    searchId++; markGenre(g.id); $("#q").value = "";
+    lastResults = g.songs.map(s=>({ id:s.id, title:s.title, artist:s.artist, source:"", lines:parseMelody(s.text) }));
+    browsing = { g, page:1, total:lastResults.length };
+    renderBrowse();
+    return;
+  }
   const my = ++searchId, out = $("#results");
   retry = ()=>browseGenre(g, page);
   markGenre(g.id);
@@ -818,7 +881,7 @@ async function browseGenre(g, page){
   }
 }
 [["#genreSeg",GENRES],["#eraSeg",ERAS]].forEach(([sel,list])=>$(sel).addEventListener("click",e=>{
-  const b = e.target.closest("[data-genre]"); if (b) browseGenre(list.find(g=>g.id===+b.dataset.genre), 1);
+  const b = e.target.closest("[data-genre]"); if (b) browseGenre(list.find(g=>String(g.id)===b.dataset.genre), 1);
 }));
 
 /* ================= UI: player ================= */

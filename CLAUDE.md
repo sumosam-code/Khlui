@@ -7,7 +7,7 @@ Live: https://sumosam-code.github.io/Khlui/ (GitHub Pages from `main`; push = de
 ## Architecture
 - Single file `index.html` (HTML + CSS + JS), plus `sw.js`, `manifest.webmanifest`, `icon.svg`, `icon-180.png`, `icon-512.png`. No build step.
 - Persistence: `localStorage` key `khlui_v1` → `{ saved:[{id,title,artist,lines,source,shift}], tab, note }`. Keep it backward compatible.
-- `sw.js`: shell is network-first (2.5s timeout) then cache; Google Fonts cache-first; song search passes straight through. **Bump `CACHE` (currently `khlui-v5`) on every deployed change.**
+- `sw.js`: shell is network-first (2.5s timeout) then cache; Google Fonts cache-first; song search passes straight through. **Bump `CACHE` (currently `khlui-v6`) on every deployed change.**
 - No `alert/confirm/prompt` (suppressed in iOS home-screen apps). Sounds are synthesised with Web Audio, never audio files.
 
 ## Music model
@@ -22,6 +22,7 @@ Live: https://sumosam-code.github.io/Khlui/ (GitHub Pages from `main`; push = de
 - **Words under notes** (Sam asked 2026-10-19 — playing is hard without them). noobnotes puts a blank line between each note row and its lyric row, so `parseMelody` drops blank lines (before this fix every song lost its lyrics). Notes joined by a dash (`D–D`) are one word: each line stores `groups` (notes per word). Across 8,700 lines in 300 songs, groups == words 92% of the time; `alignWords` uses that, splitting a word into syllables when the count matches its group size (else word on the first note, `~` on held ones), and otherwise spreads syllables evenly. `syllables()` is a heuristic — good enough to place words, not a dictionary.
 - Songs saved before 2026-10-19 have no `groups`/lyrics; `refreshWords` re-fetches them once on open (keeping the saved `shift`). Starter songs use the same dash format.
 - **Genres**: chips use noobnotes' WordPress category ids (hardcoded in `GENRES`/`ERAS`), `categories=<id>&orderby=title`, 30 per page, total from the `X-WP-Total` header. Shares `lastResults` with search, so tapping a song goes through the same `openResult`.
+- **Classical** is built in (`CLASSICAL`, opening themes, no lyrics): noobnotes had no classical category or tag, and no hits for 21 composers when checked 2026-11-09. A genre with a `songs` array skips the network. The themes were written from memory, so correct them if Sam spots a wrong note.
 - Public CORS proxies (allorigins, corsproxy.io, codetabs) were tested 2026-10-19 and all failed — don't go back to them.
 
 ## Fingering widgets
