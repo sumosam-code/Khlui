@@ -7,7 +7,7 @@ Live: https://sumosam-code.github.io/Khlui/ (GitHub Pages from `main`; push = de
 ## Architecture
 - Single file `index.html` (HTML + CSS + JS), plus `sw.js`, `manifest.webmanifest`, `icon.svg`, `icon-180.png`, `icon-512.png`. No build step.
 - Persistence: `localStorage` key `khlui_v1` → `{ saved:[{id,title,artist,lines,source,shift}], tab, note }`. Keep it backward compatible.
-- `sw.js`: shell is network-first (2.5s timeout) then cache; Google Fonts cache-first; song search passes straight through. **Bump `CACHE` (currently `khlui-v7`) on every deployed change.**
+- `sw.js`: shell is network-first (2.5s timeout) then cache; Google Fonts cache-first; song search passes straight through. **Bump `CACHE` (currently `khlui-v8`) on every deployed change.**
 - No `alert/confirm/prompt` (suppressed in iOS home-screen apps). Sounds are synthesised with Web Audio, never audio files.
 
 ## Music model
@@ -26,7 +26,9 @@ Live: https://sumosam-code.github.io/Khlui/ (GitHub Pages from `main`; push = de
 - Public CORS proxies (allorigins, corsproxy.io, codetabs) were tested 2026-10-19 and all failed — don't go back to them.
 
 ## Fingering widgets
-`miniSVG` (song note strip, Whole song list, Chords tab) draws the same numbered bamboo flute as the big `fluteSVG`, through the same `holePaint`, so covered / open / half always look identical. Sam couldn't read the old dot version. Don't reintroduce a second drawing style. The Whole song list can hold hundreds of flutes, so it only redraws when the key changes (`cur.drawnShift`); moving between notes only moves the `.on` highlight.
+`miniSVG` (song note strip, Chords tab) draws the same numbered bamboo flute as the big `fluteSVG`, through the same `holePaint`, so covered / open / half always look identical. Sam couldn't read an earlier dot version.
+
+The **Whole song** list is deliberately compact: letter, word, and `holeMarks` only for holes that are open or half-covered (covered = no mark). Sam tried full flutes there on 2026-11-09 and rejected them as too big and clumsy. It only redraws when the key changes (`cur.drawnShift`); moving between notes only moves the `.on` highlight.
 
 ## No zooming
 Sam asked for this 2026-11. Three layers, because iPhone Safari can ignore the viewport meta: `maximum-scale=1, user-scalable=no`, `touch-action:pan-x pan-y` on every element (double-tap), and JS blocking `gesture*` events and multi-finger `touchmove` (pinch). Keep inputs at 16px so focusing them doesn't zoom.
