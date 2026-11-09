@@ -7,7 +7,7 @@ Live: https://sumosam-code.github.io/Khlui/ (GitHub Pages from `main`; push = de
 ## Architecture
 - Single file `index.html` (HTML + CSS + JS), plus `sw.js`, `manifest.webmanifest`, `icon.svg`, `icon-180.png`, `icon-512.png`. No build step.
 - Persistence: `localStorage` key `khlui_v1` → `{ saved:[{id,title,artist,lines,source,shift}], tab, note }`. Keep it backward compatible.
-- `sw.js`: shell is network-first (2.5s timeout) then cache; Google Fonts cache-first; song search passes straight through. **Bump `CACHE` (currently `khlui-v4`) on every deployed change.**
+- `sw.js`: shell is network-first (2.5s timeout) then cache; Google Fonts cache-first; song search passes straight through. **Bump `CACHE` (currently `khlui-v5`) on every deployed change.**
 - No `alert/confirm/prompt` (suppressed in iOS home-screen apps). Sounds are synthesised with Web Audio, never audio files.
 
 ## Music model
@@ -21,7 +21,11 @@ Live: https://sumosam-code.github.io/Khlui/ (GitHub Pages from `main`; push = de
 - Search is two-step: a titles-only request (~2 KB), then `include=<id>` for the song tapped. The old one-shot request pulled full content for 15 songs (~50 KB) and Sam reported search failing on their iPhone. `nnFetch` tries `/wp-json/` then `/?rest_route=` (some networks filter `/wp-json/`), times out at 20s, and the error notice shows the real reason plus Try again — ask Sam what it says if search fails again.
 - **Words under notes** (Sam asked 2026-10-19 — playing is hard without them). noobnotes puts a blank line between each note row and its lyric row, so `parseMelody` drops blank lines (before this fix every song lost its lyrics). Notes joined by a dash (`D–D`) are one word: each line stores `groups` (notes per word). Across 8,700 lines in 300 songs, groups == words 92% of the time; `alignWords` uses that, splitting a word into syllables when the count matches its group size (else word on the first note, `~` on held ones), and otherwise spreads syllables evenly. `syllables()` is a heuristic — good enough to place words, not a dictionary.
 - Songs saved before 2026-10-19 have no `groups`/lyrics; `refreshWords` re-fetches them once on open (keeping the saved `shift`). Starter songs use the same dash format.
+- **Genres**: chips use noobnotes' WordPress category ids (hardcoded in `GENRES`/`ERAS`), `categories=<id>&orderby=title`, 30 per page, total from the `X-WP-Total` header. Shares `lastResults` with search, so tapping a song goes through the same `openResult`.
 - Public CORS proxies (allorigins, corsproxy.io, codetabs) were tested 2026-10-19 and all failed — don't go back to them.
+
+## Fingering widgets
+`miniSVG` (song note strip, Chords tab) draws the same numbered bamboo flute as the big `fluteSVG`, through the same `holePaint`, so covered / open / half always look identical. Sam couldn't read the old dot version. Don't reintroduce a second drawing style.
 
 ## Testing
 `python3 -m http.server 8790` then Playwright from `./venv` (gitignored) at 390×844 mobile: notes grid, search + open + save, chords + paste, reload persistence, offline load and offline saved song. Also run in **WebKit** (`p.devices["iPhone 15"]`) since that's what the phone uses.

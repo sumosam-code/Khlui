@@ -170,6 +170,8 @@ nav.tabs button.on{color:var(--leaf-300);background:rgba(90,154,63,.12)}
 .seg{display:flex;flex-wrap:wrap;gap:6px}
 .seg button{border:1px solid var(--bark-600);background:var(--bark-700);border-radius:11px;min-width:44px;min-height:40px;padding:6px 10px;font-weight:600;font-size:14px}
 .seg button.on{background:var(--leaf-700);border-color:var(--leaf-400);color:var(--leaf-200)}
+.browsehd{font-family:var(--hd);font-size:17px;margin-top:14px}
+.browsehd span{font-family:var(--bd);font-size:13px;color:var(--tx-3);margin-left:6px}
 .chordnotes{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px;margin-top:12px}
 .cn{border:1px solid var(--bark-600);background:var(--bark-800);border-radius:16px;padding:10px 6px 8px;display:flex;flex-direction:column;align-items:center;gap:6px}
 .cn .th{font-family:var(--hd);font-size:20px;color:var(--leaf-300);line-height:1}
@@ -177,10 +179,10 @@ nav.tabs button.on{color:var(--leaf-300);background:rgba(90,154,63,.12)}
 .cn .role{font-size:11px;color:var(--tx-4);text-transform:uppercase;letter-spacing:.5px}
 textarea.prog{width:100%;min-height:76px;border:1px solid var(--bark-500);background:var(--bark-950);color:var(--tx-1);border-radius:14px;padding:12px;font-size:16px;outline:none;resize:vertical}
 textarea.prog:focus{border-color:var(--leaf-500)}
-.progrow{display:flex;gap:10px;align-items:center;border-top:1px solid var(--bark-700);padding:10px 0}
+.progrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;border-top:1px solid var(--bark-700);padding:10px 0}
 .progrow:first-child{border-top:0}
 .progrow .nm{font-family:var(--hd);font-size:20px;color:var(--leaf-300);width:62px;flex:none}
-.progrow .ns{display:flex;gap:6px;flex-wrap:wrap}
+.progrow .ns{display:flex;gap:6px;flex-wrap:wrap;order:3;width:100%}
 .footer{font-size:12px;color:var(--tx-5);text-align:center;margin-top:18px;line-height:1.6}
 .footer a{color:var(--tx-4)}
 </style>
@@ -219,9 +221,7 @@ textarea.prog:focus{border-color:var(--leaf-500)}
   <section id="tab-notes">
     <div class="card leafy">
       <div class="finger" id="bigFinger"></div>
-      <div class="legend">
-        <span><i class="c"></i>Cover hole</span><span><i class="o"></i>Open</span><span><i class="h"></i>Half cover</span>
-      </div>
+      <div class="legend"></div>
     </div>
     <div class="card">
       <h2>Pick a note</h2>
@@ -253,6 +253,10 @@ textarea.prog:focus{border-color:var(--leaf-500)}
         <input id="q" type="search" placeholder="e.g. Hallelujah, Perfect, Let it go" enterkeyhint="search">
         <button class="btn leaf" type="submit">Search</button>
       </form>
+      <div class="reglabel">Browse by genre</div>
+      <div class="seg" id="genreSeg"></div>
+      <div class="reglabel">Browse by era</div>
+      <div class="seg" id="eraSeg"></div>
       <div id="results"></div>
     </div>
     <div class="card">
@@ -280,12 +284,14 @@ textarea.prog:focus{border-color:var(--leaf-500)}
         <button class="btn leaf sm" id="playChord">▶ Play</button>
       </div>
       <div class="chordnotes" id="chordNotes"></div>
+      <div class="legend"></div>
     </div>
     <div class="card">
       <h2>Paste chords from any site</h2>
       <p class="sub">Found a song's chords on a guitar site? Paste them here (e.g. <i>C G Am F</i>) and see the khlui notes for each one.</p>
       <textarea class="prog" id="progIn" placeholder="C  G  Am  F"></textarea>
       <div id="progOut" style="margin-top:6px"></div>
+      <div class="legend"></div>
     </div>
   </section>
 
@@ -312,6 +318,7 @@ textarea.prog:focus{border-color:var(--leaf-500)}
       </div>
     </div>
     <div class="strip" id="pStrip"></div>
+    <div class="legend" style="margin:0 2px 14px"></div>
     <div class="card">
       <div class="kbar">
         <div class="kv" id="pKey"></div>
@@ -388,7 +395,7 @@ function describe(m){
 function rangeTxt(a){ return a.length>2 && a[a.length-1]-a[0]===a.length-1 ? `${a[0]}–${a[a.length-1]}` : a.join(", "); }
 
 /* ================= drawing ================= */
-function holePaint(v, r, cx, cy, num){
+function holePaint(v, r, cx, cy, num, fs=11){
   const id = "h"+Math.random().toString(36).slice(2,8);
   let s = "";
   if (v === 1) s += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#leafG)" stroke="#cbe8ac" stroke-width="1.2"/>`;
@@ -396,7 +403,7 @@ function holePaint(v, r, cx, cy, num){
   else s += `<clipPath id="${id}"><rect x="${cx-r-2}" y="${cy-r-2}" width="${r+2}" height="${2*r+4}"/></clipPath>
     <circle cx="${cx}" cy="${cy}" r="${r}" fill="#0d0905" stroke="#c49a6c" stroke-width="2"/>
     <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#leafG)" clip-path="url(#${id})"/>`;
-  if (num != null) s += `<text x="${cx}" y="${cy+4}" text-anchor="middle" font-size="11" font-weight="700" fill="${v===1?'#0f1f0a':v===0?'#ab9c83':'#f2eadb'}" font-family="Sarabun,system-ui">${num}</text>`;
+  if (num != null) s += `<text x="${cx}" y="${cy+fs*.36}" text-anchor="middle" font-size="${fs}" font-weight="700" fill="${v===1?'#0f1f0a':v===0?'#ab9c83':'#f2eadb'}" font-family="Sarabun,system-ui">${num}</text>`;
   return s;
 }
 function fluteSVG(m){
@@ -426,17 +433,14 @@ function fluteSVG(m){
   return s + `</svg>`;
 }
 function miniSVG(m){
-  const f = fingering(m); if (!f) return `<svg class="mini" width="12" height="74"></svg>`;
-  let s = `<svg class="mini" width="22" height="78" viewBox="0 0 22 78">`;
-  s += `<rect x="4" y="0" width="12" height="78" rx="6" fill="#553d27"/>`;
-  for (let h = 1; h <= 7; h++) {
-    const y = 9 + (h-1)*9.4 + (h>3?3:0), v = f.holes[h];
-    s += v===1 ? `<circle cx="10" cy="${y}" r="3.4" fill="#7dbb55"/>`
-       : v===0 ? `<circle cx="10" cy="${y}" r="3" fill="#0d0905" stroke="#c49a6c" stroke-width="1"/>`
-       : `<circle cx="10" cy="${y}" r="3" fill="#0d0905" stroke="#c49a6c" stroke-width="1"/><path d="M10 ${y-3.4} a3.4 3.4 0 0 0 0 6.8z" fill="#7dbb55"/>`;
-  }
-  const tv = f.holes[0];
-  s += `<circle cx="19" cy="12" r="2.4" fill="${tv===1?'#7dbb55':'#0d0905'}" stroke="#a6d67a" stroke-width=".8"/>`;
+  const f = fingering(m), W = 52, H = 156, cx = 17, r = 7.6, fs = 9.5;
+  if (!f) return `<svg class="mini" width="${W}" height="${H}"></svg>`;
+  let s = `<svg class="mini" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${describe(m).slice(0,-1).join(", ")}">
+    <rect x="${cx-12}" y="1" width="24" height="${H-2}" rx="12" fill="url(#bambooG)" stroke="#2b1f14"/>
+    <rect x="${cx-6}" y="11" width="12" height="6" rx="1.5" fill="#0d0905" stroke="#c49a6c" stroke-width=".7"/>`;
+  for (let h = 1; h <= 7; h++) s += holePaint(f.holes[h], r, cx, 31 + (h-1)*17 + (h>3?4:0), h, fs);
+  s += `<path d="M${cx+12} 39 H${W-16}" stroke="#7f715c" stroke-dasharray="2 2"/>`;
+  s += holePaint(f.holes[0], r, W-9, 39, "T", fs);
   return s + `</svg>`;
 }
 function fingerPanel(m, extra){
@@ -707,6 +711,7 @@ async function nnFetch(params){
       if (!res.ok) throw new Error(`the song site answered with error ${res.status}`);
       const data = await res.json();
       if (!Array.isArray(data)) throw new Error("the song site sent back something unexpected");
+      data.total = +res.headers.get("X-WP-Total") || data.length;
       return data;
     } catch(e){
       lastErr = e.name === "AbortError" ? new Error("the song site took more than 20 seconds to answer")
@@ -719,19 +724,21 @@ function errNotice(msg, retry){
   return `<div class="list"><div class="notice err">${esc(msg)}${retry?`<div style="margin-top:10px"><button class="btn sm" data-retry="${retry}">Try again</button></div>`:""}</div></div>`;
 }
 
-let lastResults = [], searchId = 0;
+const toResult = p => {
+  const tt = splitTitle(decode(p.title.rendered));
+  return { id:"nn-"+p.id, pid:p.id, title:tt.title, artist:tt.artist, source:p.link, lines:null };
+};
+let lastResults = [], searchId = 0, retry = ()=>{};
 async function runSearch(){
   const q = $("#q").value.trim(); if (!q) return;
   $("#q").blur();
+  retry = runSearch; markGenre(null);
   const my = ++searchId, out = $("#results");
   out.innerHTML = `<div class="list"><div class="notice"><span class="spinner"></span>&nbsp; Looking for “${esc(q)}”…</div></div>`;
   try {
     const data = await nnFetch("per_page=15&orderby=relevance&_fields=id,title,link&search=" + encodeURIComponent(q));
     if (my !== searchId) return;
-    lastResults = data.map(p=>{
-      const tt = splitTitle(decode(p.title.rendered));
-      return { id:"nn-"+p.id, pid:p.id, title:tt.title, artist:tt.artist, source:p.link, lines:null };
-    });
+    lastResults = data.map(toResult);
     const ql = q.toLowerCase(), rank = s => s.title.toLowerCase()===ql ? 0 : s.title.toLowerCase().includes(ql) ? 1 : 2;
     lastResults.sort((a,b)=>rank(a)-rank(b));
     out.innerHTML = lastResults.length
@@ -761,7 +768,58 @@ async function openResult(i, btn){
   }
 }
 $("#searchForm").addEventListener("submit", e=>{ e.preventDefault(); runSearch(); });
-$("#results").addEventListener("click", e=>{ if (e.target.closest("[data-retry]")) runSearch(); });
+$("#results").addEventListener("click", e=>{
+  if (e.target.closest("[data-retry]")) retry();
+  if (e.target.closest("[data-more]")) browseGenre(browsing.g, browsing.page + 1);
+});
+
+/* Browse the song site's own categories, alphabetically, 30 songs at a time. */
+const GENRES = [
+  { id:9, label:"Pop" }, { id:22, label:"Rock" }, { id:11, label:"Film" }, { id:12, label:"Folk" },
+  { id:3, label:"Traditional" }, { id:10, label:"Modern" }, { id:13, label:"Seasonal" },
+];
+const ERAS = [
+  { id:16, label:"Before 1960" }, { id:15, label:"1960–1980" }, { id:20, label:"1980s" },
+  { id:21, label:"1990s" }, { id:14, label:"2000 onward" },
+];
+let browsing = null;
+function renderGenres(){
+  const chip = g => `<button data-genre="${g.id}">${esc(g.label)}</button>`;
+  $("#genreSeg").innerHTML = GENRES.map(chip).join("");
+  $("#eraSeg").innerHTML = ERAS.map(chip).join("");
+}
+function markGenre(id){ document.querySelectorAll("[data-genre]").forEach(b=>b.classList.toggle("on", +b.dataset.genre===id)); }
+function renderBrowse(extra){
+  const { g, total } = browsing, more = lastResults.length < total;
+  $("#results").innerHTML = `<div class="browsehd">${esc(g.label)}<span>${total} songs</span></div>
+    <div class="list">${lastResults.map((s,i)=>itemHTML(s,`data-result="${i}"`)).join("")}</div>${extra||""}
+    ${more && !extra ? `<button class="btn" style="width:100%;margin-top:10px" data-more="1">Show more (${lastResults.length} of ${total})</button>` : ""}`;
+}
+async function browseGenre(g, page){
+  const my = ++searchId, out = $("#results");
+  retry = ()=>browseGenre(g, page);
+  markGenre(g.id);
+  if (page === 1){
+    $("#q").value = ""; lastResults = []; browsing = null;
+    out.innerHTML = `<div class="list"><div class="notice"><span class="spinner"></span>&nbsp; Loading ${esc(g.label)} songs…</div></div>`;
+  } else {
+    const b = out.querySelector("[data-more]"); if (b){ b.disabled = true; b.innerHTML = `<span class="spinner"></span>`; }
+  }
+  try {
+    const data = await nnFetch(`per_page=30&page=${page}&orderby=title&order=asc&categories=${g.id}&_fields=id,title,link`);
+    if (my !== searchId) return;
+    lastResults = lastResults.concat(data.map(toResult));
+    browsing = { g, page, total: data.total };
+    renderBrowse();
+  } catch(err){
+    if (my !== searchId) return;
+    const notice = errNotice(navigator.onLine === false ? "You're offline, so genres can't load. Saved songs and the starter tunes still work." : `Couldn't load ${g.label} songs: ${err.message}.`, "browse");
+    if (browsing) renderBrowse(notice); else out.innerHTML = notice;
+  }
+}
+[["#genreSeg",GENRES],["#eraSeg",ERAS]].forEach(([sel,list])=>$(sel).addEventListener("click",e=>{
+  const b = e.target.closest("[data-genre]"); if (b) browseGenre(list.find(g=>g.id===+b.dataset.genre), 1);
+}));
 
 /* ================= UI: player ================= */
 let cur = null; // { song, shift, flat:[{li, ni, m}], pos }
@@ -905,7 +963,8 @@ $("#progOut").addEventListener("click", e=>{
 });
 
 /* ================= boot ================= */
-renderNotes(); renderSongLists(); renderChord();
+document.querySelectorAll(".legend").forEach(el=>{ el.innerHTML = `<span><i class="c"></i>Cover hole</span><span><i class="o"></i>Open</span><span><i class="h"></i>Half cover</span><span><b>T</b>Thumb, on the back</span>`; });
+renderNotes(); renderSongLists(); renderGenres(); renderChord();
 showTab(["notes","songs","chords"].includes(store.tab) ? store.tab : "notes");
 if ("serviceWorker" in navigator && location.protocol !== "file:") navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
